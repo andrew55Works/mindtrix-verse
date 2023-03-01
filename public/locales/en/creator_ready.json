@@ -1,0 +1,7 @@
+{
+  "h1_creator_login": "Creator Login",
+  "button_connect_wallet": "Connect Wallet",
+  "button_disconnect_wallet": "Disconnect Wallet",
+  "p_blocto_recommendation": "We recommend you adopt Blocto as your first Flow wallet. Check <0>Blocto Supports</0> to learn more.",
+  "p_cannot_change_wallet_reminder": "Please note that you cannot change the blockchain wallet address after connection because it is your on-chain identification to store your digital creations and cryptocurrency income. To learn more about the blockchain wallet, please check <0>FAQ</0> or <1>Discord</1>."
+}

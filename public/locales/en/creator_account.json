@@ -1,0 +1,18 @@
+{
+  "button_reset_password": "Reset Password",
+  "h3_account_security": "Account Security and Login",
+  "h3_blockchain_wallet": "Blockchain Wallet",
+  "h5_edit_link": "Edit",
+  "h3_distribution_platforms": "Podcast Distribution Platforms",
+  "h3_podcast_rss_feed": "Podcast RSS Feed",
+  "h3_sales_overview_of_creations": "Overview",
+  "h4_quantity_of_creations": "Creation Sum",
+  "h4_quantity_of_creations_sold": "Sold Quantity",
+  "h4_total_revenue": "Total Revenue",
+  "h4_wallet_address": "Address",
+  "h4_wallet_balance": "Available Balance",
+  "modal_button_cancel_reset_password": "Cancel",
+  "modal_button_confirm_reset_password": "Update",
+  "p_revenue_unit": "Unit: Flow Coin",
+  "p_wallet_immutability": "The wallet address cannot be changed."
+}

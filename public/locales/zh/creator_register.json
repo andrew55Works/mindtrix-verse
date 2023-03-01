@@ -1,0 +1,20 @@
+{
+  "button_resend_verification_email": "重新寄送驗證信<0>{{seconds}}</0>",
+  "button_verify": "驗證",
+  "h2_invite_code_rules": "「Mindtrix for Creators」平台採邀請制。若你已通過審核，Mindtrix 團隊會透過 mail 發送邀請碼給您。如沒收到邀請碼，請聯繫 mindtrix.xyz@gmail.com。",
+  "h3_input_invite_code": "創作者邀請碼",
+  "h3_input_podcast_rss_feed": "Podcast RSS Feed",
+  "label_mindtrix_terms": "我了解並同意上述隱私權、使用條款。",
+  "modal_button_confirm_send_verification_email": "知道了",
+  "modal_button_confirm_set_password": "建立",
+  "modal_button_discard_set_password": "放棄",
+  "modal_content_send_verification_email": "請勿關閉此瀏覽器頁面，並至您的信箱點擊驗證連結：<0>{{email}}</0>",
+  "modal_input_placeholder_set_password": "密碼",
+  "modal_title_send_verification_email": "驗證信件已成功寄出",
+  "modal_title_set_password": "Email 驗證成功，請設定登入密碼",
+  "p_fail_to_verify": "驗證失敗",
+  "p_fail_to_verify_invite_code": "請提供正確的邀請碼、Podcast RSS Feed。",
+  "p_invite_code_format_reminder": "請輸入至少6個字元。",
+  "p_podcast_rss_feed_format_reminder": "請輸入您 Podcast 託管平台上的 RSS Feed 網址，以驗證您的 Podcast 創作者身份。",
+  "p_successful_sent_email": "驗證信已寄出至：<0>{{email}}</0>"
+}

@@ -1,0 +1,9 @@
+{
+  "button_donate_more": "贊助更多內容",
+  "button_share": "向朋友分享你的獎勵",
+  "button_view_essence": "檢視此創作品獎勵",
+  "label_copyright": "Powered by Mindtrix",
+  "label_creation_description": "創作品獎勵可利用手指或滑鼠在畫面移動。\n此獎勵將會儲存在<0>{{Blocto}}</0>錢包，並且在可在<1>{{Mindtrix}}</1>平台上享受收藏品功能使用。",
+  "title_donation_success": "你贊助成功 <0>{{podcast}}</0>",
+  "title_shared_way": "分享方式"
+}

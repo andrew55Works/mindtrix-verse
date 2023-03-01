@@ -1,0 +1,15 @@
+{
+  "table_header_creation_name": "Name",
+  "table_header_creation_type": "Type",
+  "table_header_edition_quantity": "Quantity",
+  "table_header_end_time": "End",
+  "table_header_essence_name": "Name",
+  "table_header_hosting_platform": "HostingPlatform",
+  "table_header_list_price": "Price",
+  "table_header_more_operations": "Operation",
+  "table_header_order": "Order",
+  "table_header_start_time": "Start",
+  "table_header_status": "Status",
+  "table_operation_delete": "Delete",
+  "table_operation_edit": "Edit"
+}

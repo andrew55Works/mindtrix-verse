@@ -1,0 +1,14 @@
+{
+  "button_buy": "以 <0>{{pack_price}}</0> USD 購買",
+  "button_sold_out": "已全部販售完畢",
+  "card_inventory": "剩餘數量",
+  "card_inventory_hover": "剩餘數量/降落包總數\n降落包總數會因來自 Mindtrix DAO 票選結果產生變化。",
+  "card_purchase_date": "販售日期",
+  "card_purchase_date_detail": "03/28 00:00 (UTC-8)",
+  "card_purchase_date_hover": "降落包盲盒將在日期期間開放購買。",
+  "card_purchase_notes": "購買須知",
+  "card_purchase_notes_hover": "1. 一個賬號在每個地標只能購買一個降落包。\n2.一個賬號最多可購買三個不同地標的降落包。",
+  "card_supports": "需要協助嗎？ 請聯繫客服。",
+  "card_tab_pack_information": "降落包資訊",
+  "card_tab_utility": "賦能"
+}

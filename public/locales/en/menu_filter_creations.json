@@ -1,0 +1,10 @@
+{
+  "button_done": "Done",
+  "label_creatorlist": "Creators",
+  "label_essencetype": "Essence Type",
+  "label_releasetime": "Edition time",
+  "label_type1": "Image Essence",
+  "label_type2": "Audio Essence",
+  "switch_label_new": "New",
+  "switch_label_old": "Old"
+}

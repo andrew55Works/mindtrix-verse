@@ -1,0 +1,14 @@
+{
+  "button_buy": "Buy with <0>{{pack_price}}</0> USD",
+  "button_sold_out": "Sold out",
+  "card_inventory": "Inventory",
+  "card_inventory_hover": "Remaining/Total Pack Quantity\nThe total pack quantity will vary according to Mindtrix DAO voting.",
+  "card_purchase_date": "Purchase date",
+  "card_purchase_date_detail": "03/28 00:00 (UTC-8)",
+  "card_purchase_date_hover": "The pack will be available for purchase during the dates.",
+  "card_purchase_notes": "Purchase Notes",
+  "card_purchase_notes_hover": "1. An account can buy only one pack from each landmark.\n2. An account can buy up to three packs from different landmarks.",
+  "card_supports": "Need help? Please contact support.",
+  "card_tab_pack_information": "Pack Information",
+  "card_tab_utility": "Utility"
+}

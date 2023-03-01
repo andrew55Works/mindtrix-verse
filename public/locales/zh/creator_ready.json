@@ -1,0 +1,7 @@
+{
+  "h1_creator_login": "創作者登入",
+  "button_connect_wallet": "連接錢包",
+  "button_disconnect_wallet": "登出錢包",
+  "p_blocto_recommendation": "推薦您採用 Blocto 作為首個 Flow 錢包，了解更多請至 <0>Blocto Supports</0>。",
+  "p_cannot_change_wallet_reminder": "請注意，連接後您無法更改區塊鏈錢包地址，因為它代表您鏈上的身份識別，用於存儲您的數位創作和加密貨幣收入。 了解更多區塊鏈錢包資訊，請參<0>FAQ</0>或<1>Discord</1>。"
+}

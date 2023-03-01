@@ -1,0 +1,10 @@
+{
+  "button_explore": "Explore",
+  "button_login": "LOGIN",
+  "button_ok": "OK",
+  "dialog_another_world_title": "New world and place will come soon.",
+  "label_introduction": "One day, the otters on the island discovered that their voices were missing. They gesticulate and even imitate the sounds of other animals, trying to convey some good news and bad news. Just when the otter was about to forget its real voice, an otter wearing an orange cape took out a \"bagel\" and swallowed it in front of everyone, and replied fluently, \"I found the voice!\"",
+  "label_purchase_date_limit": "Drop package left <0>{{days}}</0> days <1>{{hours}}</1> hours <2>{{mins}}</2> minutes",
+  "switch_language_en": "ENG",
+  "switch_language_zh": "中文"
+}

@@ -1,0 +1,352 @@
+@font-face {
+  font-family: 'Roboto-Black';
+  src: url(/fonts/Roboto-Black.ttf) format('truetype');
+}
+
+@font-face {
+  font-family: 'Roboto-Bold';
+  src: url(/fonts/Roboto-Bold.ttf) format('truetype');
+}
+
+@font-face {
+  font-family: 'Roboto-Italic';
+  src: url(/fonts/Roboto-Italic.ttf) format('truetype');
+}
+
+@font-face {
+  font-family: 'Roboto-Light';
+  src: url(/fonts/Roboto-Light.ttf) format('truetype');
+}
+
+@font-face {
+  font-family: 'Roboto-Medium';
+  src: url(/fonts/Roboto-Medium.ttf) format('truetype');
+}
+
+@font-face {
+  font-family: 'Roboto-Regular';
+  src: url(/fonts/Roboto-Regular.ttf) format('truetype');
+}
+
+@font-face {
+  font-family: 'Roboto-Thin';
+  src: url(/fonts/Roboto-Thin.ttf) format('truetype');
+}
+
+/*reset*/
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+font,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  font-weight: inherit;
+  font-style: inherit;
+  font-size: 100%;
+  font-family: inherit;
+  vertical-align: baseline;
+}
+
+ol,
+ul {
+  list-style: none;
+}
+/* tables still need 'cellspacing="0"' in the markup */
+table {
+  border-collapse: separate;
+  border-spacing: 0;
+}
+caption,
+th,
+td {
+  text-align: left;
+  font-weight: normal;
+}
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+  content: '';
+}
+blockquote,
+q {
+  quotes: '' '';
+}
+
+.point {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  /* pointer-events: none; */
+}
+
+.point .label {
+  position: absolute;
+  top: -25px;
+  left: -25px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  /*background-image: url('/icon/icon_web_url.svg');*/
+  /*background-repeat: no-repeat;*/
+  /*background-size: contain;*/
+  /*background-position: bottom center, 50%, 50%;*/
+  /*background: #00000077;*/
+  /*border: 1px solid #ffffff77;*/
+  color: #ffffff;
+  font-family: Helvetica, Arial, sans-serif;
+  text-align: center;
+  line-height: 50px;
+  font-weight: 100;
+  font-size: 14px;
+  cursor: pointer;
+  transform: scale(0, 0);
+  transition: transform 0.3s;
+}
+
+.point .text {
+  position: absolute;
+  top: 30px;
+  left: -120px;
+  width: 200px;
+  padding: 20px;
+  border-radius: 4px;
+  background: #00000077;
+  border: 1px solid #ffffff77;
+  color: #ffffff;
+  line-height: 1.3em;
+  font-family: Helvetica, Arial, sans-serif;
+  font-weight: 100;
+  font-size: 14px;
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+}
+
+.point:hover .text {
+  opacity: 1;
+}
+
+.point.visible .label {
+  transform: scale(1, 1);
+}
+
+.cursor {
+  display: none;
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+  background: #00000077;
+  border: 1px solid #ffffff77;
+  pointer-events: none;
+}
+
+.controls-container {
+  height: 15%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 0.5rem 0 0.5rem;
+}
+
+.recorder-display {
+  display: flex;
+  align-items: center;
+  font-size: 2rem;
+}
+
+@keyframes animated-block {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.recording-indicator {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #fc4b36;
+  animation-name: animated-block;
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
+}
+
+.recording-time {
+  width: 80%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cancel-button-container {
+  width: 20%;
+  display: grid;
+  place-content: center;
+  animation-name: animated-block;
+  animation-duration: 2s;
+}
+
+.start-button,
+.cancel-button {
+  border: none;
+  border-radius: 50%;
+  background-color: #fff;
+  cursor: pointer;
+}
+
+.cancel-button:hover {
+  color: #fd1c03;
+}
+
+.cancel-button {
+  width: 25px;
+  height: 25px;
+}
+
+.start-button-container {
+  width: 15%;
+  display: grid;
+  place-content: center;
+}
+
+.start-button:hover {
+  color: #202163;
+  background-color: #f2ea02;
+}
+
+.start-button {
+  width: 100px;
+  height: 100px;
+}
+
+.recordings-container {
+  height: 78%;
+  padding: 0 1rem;
+}
+
+.recordings-container h1 {
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.no-records {
+  height: 50%;
+  display: grid;
+  place-content: center;
+  place-items: center;
+  font-size: 2rem;
+  text-align: center;
+}
+
+.recordings-list::-webkit-scrollbar {
+  width: 5px;
+}
+
+.recordings-list::-webkit-scrollbar-track {
+  background: #e4d3cf;
+}
+
+.recordings-list::-webkit-scrollbar-thumb {
+  background: #099fff;
+}
+
+.recordings-list {
+  max-height: 85%;
+  display: grid;
+  justify-content: center;
+  overflow-y: auto;
+}
+
+.record {
+  display: flex;
+  justify-content: space-evenly;
+  padding: 0.5rem;
+}
+
+.record audio {
+  min-width: 80%;
+  max-width: 80%;
+}
+
+.delete-button-container {
+  min-width: 20%;
+  max-width: 10%;
+  display: grid;
+  place-content: center;
+}
+
+.delete-button {
+  width: 25px;
+  height: 25px;
+  border: none;
+  border-radius: 50%;
+  background-color: #fff;
+  cursor: pointer;
+}
+
+.delete-button:hover {
+  color: #fd1c03;
+}

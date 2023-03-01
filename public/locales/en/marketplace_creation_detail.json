@@ -1,0 +1,9 @@
+{
+  "button_buy": "Buy Now",
+  "button_buy_another": "Buy Another",
+  "button_buy_expired": "Sell expired",
+  "button_buy_soldout": "Sold out",
+  "button_freeclaim": "Free Claim",
+  "room_identity_owner": "Your wallet address",
+  "room_identity_visitor": "Owner's wallet address"
+}

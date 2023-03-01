@@ -1,0 +1,10 @@
+{
+  "button_filter": "Filter",
+  "card_creation_edition_count": "Remaining<0>rest</0> / <1>total</1>",
+  "card_podcast_restcreation": "Rest creations",
+  "card_podcast_totalcreation": "Total creations",
+  "label_successful_copy_link": "The link has been copied to the clipboard. Share it with friends and family to support creations!",
+  "navigation_button_account_default": "Login",
+  "navigation_button_account_login": "Account",
+  "searchbar_text_default": "Search for podcasts, creators, episode titles"
+}

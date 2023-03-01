@@ -1,0 +1,15 @@
+{
+  "assistive_text_donation_link": "複製此連結，可放置任何給粉絲贊助的頁面",
+  "assistive_text_donation_money": "粉絲將以 FLOW 代幣贊助您，每24小時可以更改一次，FLOW代幣換算會根據價格浮動，請謹慎設定。",
+  "assistive_text_donation_update_time": "最後更新時間：<0>{{dateTime}}</0>",
+  "text_donation_money_error": "請輸入數字",
+  "button_money_cancel": "取消",
+  "button_money_ok": "確定",
+  "input_text_default": "設定金額",
+  "input_text_donation_link": "https://...",
+  "label_donation_link": "贊助連結",
+  "label_donation_money": "贊助金額",
+  "label_enable": "啟用贊助盈利",
+  "label_unit_change": "≈<0>{{pricechange}}</0> NTD",
+  "popup_message_copy": "已複製連結"
+}

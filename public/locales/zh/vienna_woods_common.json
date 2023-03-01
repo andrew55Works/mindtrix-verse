@@ -1,0 +1,10 @@
+{
+  "button_explore": "開始探索",
+  "button_login": "登入",
+  "button_ok": "確認",
+  "dialog_another_world_title": "待開放世界",
+  "label_introduction": "故事就從這裡中斷。某一天，島上的水獺發現自己的聲音不見了。他們比手畫腳，甚至模仿其他動物的聲音，試著傳達一些好消息和壞消息。就在水獺快要忘記自己真正的聲音的時候，一隻穿著橘色披風的水獺拿出一顆「貝果」當著大家的面吞了下去，流暢地回答「我找到聲音了！」",
+  "label_purchase_date_limit": "降落包剩下<0>{{days}}</0>天<1>{{hours}}</1>小時<2>{{mins}}</2>分鐘",
+  "switch_language_en": "ENG",
+  "switch_language_zh": "中文"
+}

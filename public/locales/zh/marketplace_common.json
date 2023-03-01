@@ -1,0 +1,10 @@
+{
+  "button_filter": "篩選",
+  "card_creation_edition_count": "剩餘數量 <0>rest</0> / <1>total</1>",
+  "card_podcast_restcreation": "未售出創作品",
+  "card_podcast_totalcreation": "創作品總數",
+  "label_successful_copy_link": "已複製連結至剪貼簿，分享給親朋好友一同支持創作吧！",
+  "navigation_button_account_default": "登入",
+  "navigation_button_account_login": "帳號",
+  "searchbar_text_default": "搜尋 Podcast、創作者、單集標題"
+}

@@ -1,0 +1,15 @@
+{
+  "assistive_text_donation_link": "Copy this link to place any social media page",
+  "assistive_text_donation_money": "Fans will donate you in $FLOW token. It can be changed every 24 hours. The $FLOW token conversion will fluctuate according to the price, please set it carefully.",
+  "assistive_text_donation_update_time": "Last update time: <0> {{dateTime}}</0>",
+  "text_donation_money_error": "Please key in numbers",
+  "button_money_cancel": "Cancel",
+  "button_money_ok": "OK",
+  "input_text_default": "Enter FLOW price",
+  "input_text_donation_link": "https://...",
+  "label_donation_link": "Donation Link",
+  "label_donation_money": "Price",
+  "label_enable": "Enable donation monetization",
+  "label_unit_change": "≈<0>{{pricechange}}</0> NTD",
+  "popup_message_copy": "Link copied"
+}

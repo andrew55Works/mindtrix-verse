@@ -1,0 +1,15 @@
+{
+  "table_header_creation_name": "創作名稱",
+  "table_header_creation_type": "創作類型",
+  "table_header_edition_quantity": "發行數量",
+  "table_header_end_time": "結束時間",
+  "table_header_essence_name": "精華名稱",
+  "table_header_hosting_platform": "託管平台",
+  "table_header_list_price": "發行價格",
+  "table_header_more_operations": "操作",
+  "table_header_order": "次序",
+  "table_header_start_time": "起始時間",
+  "table_header_status": "狀態",
+  "table_operation_delete": "刪除",
+  "table_operation_edit": "編輯"
+}

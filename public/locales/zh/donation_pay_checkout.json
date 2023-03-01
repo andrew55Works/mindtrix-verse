@@ -1,0 +1,20 @@
+{
+  "button_buy_flow": "購買FLOW代幣",
+  "button_cancel": "取消",
+  "button_refresh_balance": "更新錢包餘額",
+  "button_pay": "確認付款",
+  "label_donation_price": "贊助金額",
+  "label_donation_price_detail": "<0>{{price}}</0> USD",
+  "label_donation_reward": "創作品獎勵",
+  "label_donation_reward_detail": "<0>reward_episode<0>",
+  "label_not_enough_money": "您的錢包餘額不足\n請先購買FLOW代幣來支付贊助",
+  "label_unit_change": "≈<0>{{pricechange}}</0> NTD",
+  "label_wallet_address": "地址",
+  "label_wallet_money": "餘額(未付款)",
+  "label_wallet_money_detail": "<0>{{money}}</0> USD",
+  "title_checkout": "贊助詳細資訊",
+  "title_my_wallet": "我的錢包",
+  "title_detail": "明細",
+  "title_message_optional": "留言(選填)",
+  "title_name_optional": "暱稱(選填)"
+}

@@ -1,0 +1,20 @@
+{
+  "button_resend_verification_email": "Resend verification email <0>{{seconds}}</0>",
+  "button_verify": "Verify",
+  "h2_invite_code_rules": "The \"Mindtrix for Creators\" platform is invitation-only. If you have passed the review, the Mindtrix team will send you an invitation code via email. If you do not receive it, please contact mindtrix.xyz@gmail.com",
+  "h3_input_invite_code": "Invitation Code for Creators",
+  "h3_input_podcast_rss_feed": "Podcast RSS Feed",
+  "label_mindtrix_terms": "I acknowledge my assent to the terms above.",
+  "modal_button_confirm_send_verification_email": "Got it.",
+  "modal_button_confirm_set_password": "Create",
+  "modal_button_discard_set_password": "Discard",
+  "modal_content_send_verification_email": "Please do not close this browser page and click the verification link in your mail: <0> {{email}}</0>",
+  "modal_input_placeholder_set_password": "Password",
+  "modal_title_send_verification_email": "A verification letter has been sent.",
+  "modal_title_set_password": "Successfully verify your email and please set a platform password.",
+  "p_fail_to_verify": "verification failed",
+  "p_fail_to_verify_invite_code": "Please provide the correct invitation code and Podcast RSS Feed.",
+  "p_invite_code_format_reminder": "Please enter at least 6 characters.",
+  "p_podcast_rss_feed_format_reminder": "Please enter the URL of the RSS feed on your podcast hosting platform to verify your identity as the podcast creator.",
+  "p_successful_sent_email": "A verification email has been sent to: <0> {{email}}</0>"
+}

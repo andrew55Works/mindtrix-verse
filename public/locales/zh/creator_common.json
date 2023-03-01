@@ -1,0 +1,19 @@
+{
+  "navigation_button_give_feedback": "問題反應",
+  "navigation_side_label_back": "退回上一頁",
+  "navigation_side_menu_item_add_audio_essence": "新增精華音檔",
+  "navigation_side_menu_item_add_image_essence": "新增精華圖檔",
+  "navigation_side_menu_item_home": "首頁",
+  "navigation_side_menu_item_logout": "登出",
+  "navigation_side_menu_item_notification": "通知",
+  "navigation_side_menu_donation": "贊助盈利",
+  "p_audio_essence_type": "音檔",
+  "p_delete_essence": "您正要刪除精華：<0>{{essenceName}}</0>",
+  "p_created_essence_list_status": "待上架",
+  "p_draft_essence_list_status": "草稿",
+  "p_image_essence_type": "圖檔",
+  "p_invite_code_format_reminder": "請輸入至少6個字元。",
+  "p_minted_essence_list_status": "待發行",
+  "p_verify_password_error": "請輸入正確密碼。",
+  "top_navigation_button_account_setting": "帳號設定"
+}

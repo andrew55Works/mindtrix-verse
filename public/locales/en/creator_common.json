@@ -1,0 +1,19 @@
+{
+  "navigation_button_give_feedback": "Give Feedback",
+  "navigation_side_label_back": "Go Back",
+  "navigation_side_menu_item_add_audio_essence": "Add Audio Essence",
+  "navigation_side_menu_item_add_image_essence": "Add Image Essence",
+  "navigation_side_menu_item_home": "Home",
+  "navigation_side_menu_item_logout": "Logout",
+  "navigation_side_menu_item_notification": "Notification",
+  "navigation_side_menu_donation": "Donation Monetization",
+  "p_audio_essence_type": "Audio",
+  "p_delete_essence": "You are about to delete the essence: <0>{{essenceName}}</0>",
+  "p_created_essence_list_status": "To be listed",
+  "p_draft_essence_list_status": "Draft",
+  "p_image_essence_type": "Image",
+  "p_invite_code_format_reminder": "Please enter at least 6 characters.",
+  "p_minted_essence_list_status": "Minted",
+  "p_verify_password_error": "Please enter the correct password.",
+  "top_navigation_button_account_setting": "Account Settings"
+}

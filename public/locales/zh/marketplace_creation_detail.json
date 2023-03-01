@@ -1,0 +1,9 @@
+{
+  "button_buy": "購買",
+  "button_buy_another": "購買另一個",
+  "button_buy_expired": "販售時間已過",
+  "button_buy_soldout": "已售完",
+  "button_freeclaim": "免費領取",
+  "room_identity_owner": "您的錢包地址",
+  "room_identity_visitor": "擁有者的錢包地址"
+}

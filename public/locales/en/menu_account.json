@@ -1,0 +1,17 @@
+{
+  "button_logout": "Logout",
+  "label_account": "Account",
+  "button_wallet": "Connect wallet",
+  "label_2bdashboard": "Creator Dashboard",
+  "label_marketplace": "Marketplace",
+  "label_language": "Language",
+  "label_mycollections": "My Collection",
+  "label_notification": "Notification",
+  "label_title_2b": "Podcast creator",
+  "label_title_2c": "Collector",
+  "label_unit": "FLOW",
+  "label_wallet": "Wallet Address",
+  "label_watching": "Watching",
+  "switch_label_eng": "EN",
+  "switch_label_zh": "中文"
+}

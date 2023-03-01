@@ -1,0 +1,18 @@
+{
+  "button_reset_password": "重設密碼",
+  "h3_account_security": "帳號安全和登入",
+  "h3_blockchain_wallet": "區塊鏈錢包",
+  "h5_edit_link": "編輯",
+  "h3_distribution_platforms": "Podcast 發布平台",
+  "h3_podcast_rss_feed": "Podcast RSS Feed",
+  "h3_sales_overview_of_creations": "發行總覽",
+  "h4_quantity_of_creations": "總創作品數量",
+  "h4_quantity_of_creations_sold": "售出數量",
+  "h4_total_revenue": "總收益",
+  "h4_wallet_address": "地址",
+  "h4_wallet_balance": "可用餘額",
+  "modal_button_cancel_reset_password": "取消",
+  "modal_button_confirm_reset_password": "更改",
+  "p_revenue_unit": "單位: Flow Coin",
+  "p_wallet_immutability": "目前錢包不提供變更服務"
+}

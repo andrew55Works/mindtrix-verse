@@ -1,0 +1,20 @@
+{
+  "label_donation_people": "贊助人數",
+  "label_income_count": "<0>{{income}}</0> FLOW",
+  "label_people_count": "<0>people<0>",
+  "label_total_income": "全部贊助收益",
+  "label_total_platform_cut": "平台抽成費用",
+  "label_total_creator_cut": "創作者實際收益",
+  "label_unit_change": "≈<0>{{incomechange}}</0> NTD",
+  "row_label_episode": "<0>episode<0>",
+  "row_label_message": "<0>message<0>",
+  "row_label_money": "<0>money<0>",
+  "row_label_name": "<0>name<0>",
+  "row_label_time": "<0>time<0>",
+  "table_title_episode": "集數",
+  "table_title_message": "留言",
+  "table_title_money": "金額",
+  "table_title_name": "暱稱",
+  "table_title_time": "日期",
+  "table_title_transaction": "交易紀錄"
+}
