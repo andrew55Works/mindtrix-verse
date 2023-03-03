@@ -1,12 +1,15 @@
 import styled from 'styled-components';
 import React from 'react';
 import { useMarketplaceBuyingI18n } from '../../../../hooks/i18n/i18n-marketplace.hooks';
-import { NextRouter } from 'next/router';
 import { CommonFlexContainer } from '../../../common/flexbox/common-flex.styles';
 import { Text } from '../../../../styles/styled-system/text.theme';
 import CoverImage from '../../../common/cover/cover-image.component';
 import { getTxFlowScanLink } from '../../../../utils/flow-blockchain.utils';
 import { openNewWindow } from '../../../../utils/window.utils';
+import {
+  breakpointNumbers,
+  breakpoints,
+} from '../../../../styles/styled-system/styled-system.config';
 
 interface MainBackgroundProps {
   isMorning: boolean;
@@ -45,7 +48,7 @@ export const DayTimeContainer = styled.div`
   top: 0;
   left: 0;
   width: 100%;
-  z-index: 2;
+  z-index: 1;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -187,17 +190,27 @@ export interface MintingPackResultModalParams {
   isMintingSuccess: boolean;
   isShowModal: boolean;
   marketplaceText: ReturnType<typeof useMarketplaceBuyingI18n>;
+  screenSize: { height: number; width: number };
   setIsShowModal: React.Dispatch<boolean>;
   walletAddress: string;
 }
 export const getMintingPackResultModalProps = ({
   ContentLayout,
   isShowModal,
+  screenSize,
   setIsShowModal,
   isMintingSuccess,
   walletAddress,
   marketplaceText: { text },
 }: MintingPackResultModalParams): MintingPackResultModalProps => {
+  // screenSize
+  let maxWidth = '30vw';
+  if (screenSize.width < breakpointNumbers.lg) {
+    maxWidth = '80vw';
+  } else {
+    maxWidth = '30vw';
+  }
+
   return {
     isEnableDismissModalFromClickingBackground: false,
     isShowModal,
@@ -222,6 +235,6 @@ export const getMintingPackResultModalProps = ({
       title: undefined,
     },
     width: 'auto',
-    maxWidth: '18vw',
+    maxWidth,
   };
 };

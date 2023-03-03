@@ -82,7 +82,9 @@ export const PackAndLandmarkInfo = {
         justify-content: center;
         align-items: flex-start;
         width: 100%;
-        margin-bottom: 10px;
+        &:not(:first-child) {
+          margin-top: 10px;
+        }
       `,
       Title: styled.div`
         display: flex;
@@ -150,18 +152,23 @@ export const CloseIcon: FC<{
 export const TopSecret = {
   Container: styled.div`
     width: 100%;
+    max-height: 100%;
     position: relative;
   `,
   SvgContainer: styled.div`
     position: absolute;
-    left: 50%;
-    top: 50%;
-    width: 90%;
-    transform: translate(-50%, -50%);
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    svg {
+      width: 100%;
+      height: 100%;
+    }
   `,
   ImgContainer: styled.img`
     width: 100%;
-    height: 100px;
+    height: auto;
     object-position: center;
     object-fit: contain;
   `,
@@ -246,20 +253,12 @@ export const PackRowContent: FC<{ selectedTabIndex: number }> = ({
 
 export const PaymentPackInfo: FC<{}> = () => {
   const viennaWoodsContext = useContext(ViennaWoodsContext);
-  const { dismissModalFn, switchLandmarkFn, selectedPaymentStage } =
+  const { switchLandmarkFn, selectedPaymentStage } =
     useContext(PurchaseContext);
   const packGifURL = viennaWoodsContext?.landmarkModalInfo?.pack?.gifUrl ?? '';
-  const isShowSwitchIcon =
-    selectedPaymentStage === PaymentStageEnum.WORLD_PACK;
+  const isShowSwitchIcon = selectedPaymentStage === PaymentStageEnum.WORLD_PACK;
   return (
     <>
-      <CommonFlexContainer
-        width={'100%'}
-        flexDirection={'row'}
-        justifyContent={'flex-end'}
-      >
-        <CloseIcon onClick={dismissModalFn} />
-      </CommonFlexContainer>
       <CommonFlexContainer
         width={'100%'}
         flexDirection={'row'}

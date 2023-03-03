@@ -1,7 +1,6 @@
 import { default as React, FC } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { ProductTypeEnum } from '../navigation/index';
-import Drawer from '../common/drawer/index';
 import theme from '../../styles/eva-styled-system.json';
 import { TopNavigation } from '../navigation/top-navigation.component';
 
@@ -34,15 +33,15 @@ export const PageLayout: FC<Props> = ({
   productType = ProductTypeEnum.Creator,
 }) => {
   // useBrowserLocale();
+  const TopNav = () => (
+    <TopNavigation productTitle={'Mindtrix'} productType={productType} />
+  );
   return (
     <div
       style={{ backgroundColor: theme['text-secondary-color'], width: '100%' }}
     >
       <View style={styles.subContainer}>
-        <View style={styles.drawerAndContent}>
-          <Drawer.Left productTitle={'Mindtrix'} productType={productType} />
-          <View style={styles.content}>{children}</View>
-        </View>
+        <View>{TopNav()}</View>
       </View>
     </div>
   );

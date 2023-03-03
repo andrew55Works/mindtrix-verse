@@ -3,6 +3,7 @@ import { LIST_ENUM, LIST_ENUM_TYPE } from './list-enum.types';
 import { NFT_ENUM, NFT_ENUM_TYPE } from './nft-enum.types';
 import { Episode } from './episode.types';
 import { Show } from '../../redux/show/show.interface';
+import { CreatorProfile } from '../../redux/creator/creator.interface';
 
 export interface NFTDto {
   _id?: string | null;
@@ -153,7 +154,7 @@ export interface PostVerifyCadenceAndGetChildAccountSign {
 }
 
 export interface PostCreateSsoUserAndBindChildWalletAccountRes {
-  createSsoUserAndBindChildWalletAccountFromMindtrix: TxRes;
+  createSsoUserAndBindChildWalletAccountFromMindtrix: TxRes & CreatorProfile;
 }
 
 export const initialImageEssenceDto: NFTPodcastImageCoverDto = {

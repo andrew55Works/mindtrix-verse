@@ -86,7 +86,7 @@ export const getFlowCadenceContractAddress = () => {
     MINDTRIX_NFT_ADDRESS: pubConfig.MINDTRIX_NFT_ADDRESS,
     MINDTRIX_ESSENCE_ADDRESS: pubConfig.MINDTRIX_ESSENCE_ADDRESS,
     MINDTRIX_NFT_VERIFIER: pubConfig.MINDTRIX_NFT_VERIFIER,
-    MINDTRIX_MARKETPLACE_ADDRESS: pubConfig.MINDTRIX_MARKETPLACE_ADDRESS
+    MINDTRIX_MARKETPLACE_ADDRESS: pubConfig.MINDTRIX_MARKETPLACE_ADDRESS,
   };
 };
 
@@ -104,11 +104,6 @@ export const getWeb3Storage = () => {
   return {
     IPFS_WEB3_STORAGE_API_TOKEN: pubConfig.IPFS_WEB3_STORAGE_API_TOKEN,
   };
-};
-
-export const getV2RPoapEssenceId = () => {
-  const pubConfig = getConfig()?.publicRuntimeConfig ?? null;
-  return Number(pubConfig.V2R_POAP_ESSENCE_ID);
 };
 
 export const getDapperMerchantAddress = () => {

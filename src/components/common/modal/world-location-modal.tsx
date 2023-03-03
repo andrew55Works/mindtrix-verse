@@ -1,6 +1,6 @@
 import React, { FC, useContext } from 'react';
 import { AnimatePresence, motion, MotionStyle } from 'framer-motion';
-import * as S from './world-location-modal-childs';
+import * as Modal from './world-location-modal-childs';
 import { useSelector } from 'react-redux';
 import { selectCollectorProfile } from '../../../redux/collector/collector.selector';
 import { initialWallet } from '../../../types/wallet.type';
@@ -19,11 +19,7 @@ export const _style = {
     background: 'rgba(0,0,0,.5)',
     zIndex: 1,
   }),
-  modal: (
-    padding: string,
-    maxHeight = '66%',
-    maxWidth = '100vw',
-  ): MotionStyle => ({
+  modal: (): MotionStyle => ({
     display: 'flex',
     position: 'relative',
     flexDirection: 'row',
@@ -31,7 +27,6 @@ export const _style = {
     alignItems: 'flex-end',
     width: '100%',
     height: '100%',
-    padding,
   }),
 };
 
@@ -136,25 +131,15 @@ export const WorldLocationModal: FC<WorldLocationModelProps> = ({
           exit={'hidden'}
           onClick={_onClick.backgroundCover}
         >
-          <motion.div
-            style={_style.modal(modalPadding, maxHeight, maxWidth)}
-            variants={framerVariants.modal}
-          >
-            <S.Modal.Container>
-              <S.Modal.LeftStory
-                landmark={landmark}
-                pack={pack}
-                onClickLeftButton={onClick.dismissModalFn}
-              />
-              <S.Modal.RightPayment
-                dismissModalFn={onClick.dismissModalFn}
-                switchLandmarkFn={onClick.switchLandmarkFn}
-                packTemplate={essence}
-                walletAddress={collectorWalletAddress}
-                landmark={landmark}
-                pack={pack}
-              />
-            </S.Modal.Container>
+          <motion.div style={_style.modal()} variants={framerVariants.modal}>
+            <Modal.ContentRwd
+              walletAddress={collectorWalletAddress}
+              packTemplate={essence}
+              pack={pack}
+              landmark={landmark}
+              dismissModalFn={onClick.dismissModalFn}
+              switchLandmarkFn={onClick.switchLandmarkFn}
+            />
           </motion.div>
         </motion.div>
       )}

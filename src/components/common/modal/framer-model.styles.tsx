@@ -30,6 +30,7 @@ export const _style = {
     maxHeight = '66%',
     maxWidth = '100vw',
   ): MotionStyle => ({
+    position: 'fixed',
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-between',
@@ -39,6 +40,7 @@ export const _style = {
     width: 'fit-content',
     margin: '0 auto',
     padding,
+    boxShadow: '4px 4px 5px rgba(0, 0, 0, 0.25)',
     background: 'white',
     borderRadius: '10px',
     textAlign: 'center',
@@ -49,25 +51,25 @@ export const framerVariants = {
     visible: { opacity: 1 },
     hidden: { opacity: 0 },
   },
-  modal: (transitionY = '300px') => ({
+  modal: {
     hidden: {
       y: '-60%',
       x: '-50%',
+      top: '50%',
+      left: '50%',
       opacity: 0,
     },
     visible: {
       y: '-50%',
       x: '-50%',
       opacity: 1,
-      position: 'fixed',
       top: '50%',
       left: '50%',
-      boxShadow: '4px 4px 5px rgba(0, 0, 0, 0.25)',
       transition: {
         delay: 0.2,
       },
     },
-  }),
+  },
 };
 
 const HeaderContainer = styled.div<

@@ -60,7 +60,6 @@ export const usePurchaseButtonStatus = (
           <Text.h2
             key='0'
             status={'basic'}
-            color={'#ffffff'}
             my={0}
             mx={'2px'}
             children={priceUSD}

@@ -158,14 +158,14 @@ export const getServerSideProps: GetServerSideProps = async ({
   const text: { [key: string]: string } = {
     // seo_title: _get(previewText, ['seo_title'], ''),
     // seo_description: _get(previewText, ['seo_description'], ''),
-    seo_title: 'Vienna Woods | World',
+    seo_title: 'Mindtrix Verse | World',
     seo_description: 'Pick your packs to land Now!',
   };
   const previewImage =
-    'https://firebasestorage.googleapis.com/v0/b/mindtrix-pro.appspot.com/o/public%2Fmindtrix%2Fworld_vienna_woods_sun.png?alt=media&token=e731116f-2eaa-4393-9c66-cf8363411c69';
+    'https://firebasestorage.googleapis.com/v0/b/mindtrix-dev.appspot.com/o/public%2F2023-0228-vienna-woods%2Fmindtrix_verse_cover_1200_630.png?alt=media&token=e997e0f5-663d-49c6-b6e9-2e5fab57cfe6';
   const images = [
     {
-      alt: 'Mindtrix World',
+      alt: 'Mindtrix Verse',
       // 建議大小 1200 x 630
       height: 630,
       width: 1200,

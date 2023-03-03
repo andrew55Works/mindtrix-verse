@@ -9,37 +9,6 @@ import { CommonFlexContainer } from '../common/flexbox/common-flex.styles';
 import { TooltipQuestion } from '../common/tooltip/tooltip-question.component';
 import { PaymentStageEnum } from '../../hooks/payment/payment.hooks';
 import { PurchaseChooseWallet } from './purchase-choose-wallet/purchase-choose-wallet.component';
-import {SafeFclResponse} from "../../api/fcl/transactions.fcl";
-
-export const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: flex-start;
-  background: #e4e9f2;
-  border: 3px solid #0c0c0c;
-  border-radius: 20px;
-  box-shadow: 3px 10px 4px rgba(0, 0, 0, 0.25);
-  padding: 12px 12px 12px 24px;
-  width: 100%;
-  margin: 12px 0 70px 0;
-  height: 70vh;
-  overflow-y: scroll;
-  &::-webkit-scrollbar {
-    width: 14px;
-    background: transparent;
-  }
-  &::-webkit-scrollbar-track {
-    background-color: transparent;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    border: 4px solid rgba(0, 0, 0, 0);
-    border-radius: 9999px;
-    background-clip: padding-box;
-    background-color: #aaaaaa80;
-  }
-`;
 
 export const SelectedCoin = styled.div`
   display: flex;
@@ -47,14 +16,15 @@ export const SelectedCoin = styled.div`
   width: 100%;
   justify-content: flex-start;
   align-items: center;
-  border: 1px solid #a2a0a0;
+  background-color: #ffffff;
+  border: 1px solid #000000;
   border-radius: 5px;
   box-sizing: border-box;
   padding: 8px 12px 8px 12px;
   margin: 0 0 40px 0;
   cursor: pointer;
   &:hover {
-    background: #e6e8e8;
+    background-color: #e6e8e8;
   }
 `;
 
@@ -232,18 +202,23 @@ export const PriceTitle: FC<{
 export const SupportLink = styled.a`
   margin-left: 4px;
 `;
-export const SupportLinkText: FC<{ postText: string; preText: string }> = ({
-  preText,
-  postText,
-}) => {
+export const SupportLinkText: FC<SpaceProps> = ({ padding }) => {
+  const text = {
+    h4_need_help: 'Need helps?',
+    h4_contact_support: 'Contact support',
+  };
   return (
-    <CommonFlexContainer flexDirection={'row'} alignSelf={'center'}>
+    <CommonFlexContainer
+      flexDirection={'row'}
+      alignSelf={'center'}
+      padding={padding}
+    >
       <Text.h5 status={'basic'} m={0}>
-        {preText}
+        {text.h4_need_help}
         <SupportLink
           target={'_blank'}
           href={'https://discord.gg/2fWsUZNnyR'}
-          children={postText}
+          children={text.h4_contact_support}
         />
       </Text.h5>
     </CommonFlexContainer>

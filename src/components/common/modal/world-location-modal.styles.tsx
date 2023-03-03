@@ -1,5 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
+import {
+  flexbox,
+  FlexboxProps,
+  layout,
+  LayoutProps,
+  space,
+  SpaceProps,
+} from 'styled-system';
 
 export const LeftImgAndTextContainer = styled.div`
   display: flex;
@@ -67,7 +75,9 @@ export const LandmarkMaskSvg = styled.div`
   }
 `;
 
-export const LocationDetailImgContainer = styled.div`
+export const LocationDetailImgDesktopContainer = styled.div<
+  LayoutProps & FlexboxProps
+>`
   position: relative;
   display: flex;
   flex-shrink: 0;
@@ -80,23 +90,32 @@ export const LocationDetailImgContainer = styled.div`
   width: auto;
   margin-left: 20px;
   transform: translateY(40px);
+  ${flexbox};
+  ${layout};
 `;
 
-export const LocationDetailImg = styled.img`
+export const LocationDetailImgMobileContainer = styled.div<
+  LayoutProps & FlexboxProps
+>`
+  height: 100%;
+  width: 100%;
+`;
+
+export const LocationDetailImg = styled.img<LayoutProps>`
   height: auto;
   width: auto;
   object-fit: contain;
   max-width: 100%;
   max-height: 100%;
+  ${layout};
 `;
 
-export const PaymentContainer = styled.div`
+export const PaymentContainer = styled.div<SpaceProps & LayoutProps>`
   display: flex;
   flex: 10;
   position: relative;
-  margin-right: 60px;
-  margin-left: 70px;
   width: 100%;
-  max-width: 450px;
   z-index: 3;
+  ${space}
+  ${layout}
 `;

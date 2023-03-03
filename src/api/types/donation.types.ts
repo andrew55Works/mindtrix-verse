@@ -48,10 +48,6 @@ export interface CreateDonationRes {
   createDonation: DonationVo;
 }
 
-export interface GetDonationsRes {
-  findDonationsByCreatorId: Array<DonationVo>;
-}
-
 export interface GetDonationByIdRes {
   findDonationByDonationId: DonationVo;
 }

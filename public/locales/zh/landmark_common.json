@@ -10,5 +10,7 @@
   "card_purchase_notes_hover": "1. 一個賬號在每個地標只能購買一個降落包。\n2.一個賬號最多可購買三個不同地標的降落包。",
   "card_supports": "需要協助嗎？ 請聯繫客服。",
   "card_tab_pack_information": "降落包資訊",
-  "card_tab_utility": "賦能"
+  "card_tab_utility": "賦能",
+  "modal_tab_pack": "降落包",
+  "modal_tab_story": "故事"
 }

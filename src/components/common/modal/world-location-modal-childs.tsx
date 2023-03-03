@@ -1,105 +1,27 @@
+import React, { FC } from 'react';
 import { ILandmark, IPack } from '../../../types/vienna-world.types';
 import { NFTEssenceV2 } from '../../../api/types/nft.types';
-import React, { FC } from 'react';
-import { SafeFclResponse } from '../../../api/fcl/transactions.fcl';
-import { PurchaseNFTContainer } from '../../purchase/purchase-nft.container';
-import { PaymentStageEnum } from '../../../hooks/payment/payment.hooks';
+import { WorldLocationModalMobile } from './world-location-modal-childs-mobile';
+import { WorldLocationModalDesktop } from './world-location-modal-childs-desktop';
 import styled from 'styled-components';
-import { FlexboxProps } from 'styled-system';
-import { Text } from '../../../styles/styled-system/text.theme';
-import * as S from './world-location-modal.styles';
-import { PaymentContainer } from './world-location-modal.styles';
-import dynamic from 'next/dynamic';
+import {
+  border,
+  BorderProps,
+  color,
+  ColorProps,
+  layout,
+  LayoutProps,
+  space,
+  SpaceProps,
+} from 'styled-system';
 
-const Container = styled.div`
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: flex-end;
-  width: 100%;
-`;
-
-interface LeftStoryProps {
+export interface LeftStoryProps {
   landmark: ILandmark;
   onClickLeftButton: () => void;
   pack: IPack;
 }
-const LeftStory: FC<LeftStoryProps & FlexboxProps> = ({
-  landmark,
-  pack,
-  onClickLeftButton,
-}) => {
-  const landmarkId = landmark?.id ?? '';
-  const SVG = dynamic(
-    () =>
-      import(
-        `../../../assets/svg/vienna_world/landmark_${landmarkId}_black.svg`
-      ),
-  );
-  const onClick = {
-    landmarkSvg: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-      // @ts-ignore
-      const tagName = (e.target?.tagName ?? '').toLowerCase();
-      const isSvgPath = tagName === 'path';
-      if (isSvgPath) {
-        e.stopPropagation();
-      }
-    },
-  };
 
-  const LandMarkMaskSvg = SVG ? <SVG /> : null;
-  const locationImgSrc = landmark?.detailedImgUrl ?? '';
-  return (
-    <>
-      <S.LeftBackgroundColor
-        themeColor={landmark?.themeColor ?? '#8C8477'}
-        onClick={(e) => e.stopPropagation()}
-      />
-      <S.LeftImgAndTextContainer>
-        <S.LocationDetailImgContainer onClick={onClick.landmarkSvg}>
-          <S.LocationDetailImg alt='location_img' src={locationImgSrc} />
-          <S.LandmarkMaskSvg>{LandMarkMaskSvg}</S.LandmarkMaskSvg>
-        </S.LocationDetailImgContainer>
-        <S.LeftContentContainer onClick={(e) => e.stopPropagation()}>
-          <Text.h2
-            status={'basic'}
-            fontSize={'40px'}
-            color={'#ffffff'}
-            maxWidth={'200px'}
-            lineHeight={'47px'}
-            isAutoWrap={true}
-            marginTop={0}
-            marginBottom={0}
-            height={'100%'}
-            flexShrink={0}
-            py={2}
-          >
-            {landmark?.name ?? ''}
-          </Text.h2>
-          <S.LeftTextScrollContainer>
-            <Text.h4
-              flex={8}
-              status={'basic'}
-              color={'#ffffff'}
-              isAutoWrap={true}
-              marginTop={0}
-              py={2}
-              paddingRight={'20px'}
-              marginBottom={0}
-            >
-              {landmark?.description ?? ''}
-            </Text.h4>
-          </S.LeftTextScrollContainer>
-        </S.LeftContentContainer>
-      </S.LeftImgAndTextContainer>
-    </>
-  );
-};
-
-interface RightPaymentProps {
+export interface RightPaymentProps {
   dismissModalFn: () => void;
   landmark: ILandmark;
   pack: IPack;
@@ -107,32 +29,103 @@ interface RightPaymentProps {
   switchLandmarkFn: (isForward: boolean) => void;
   walletAddress: string;
 }
-const RightPayment: FC<RightPaymentProps> = ({
-  dismissModalFn,
-  switchLandmarkFn,
-  packTemplate,
+
+export const onClick = {
+  landmarkSvg: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    // @ts-ignore
+    const tagName = (e.target?.tagName ?? '').toLowerCase();
+    const isSvgPath = tagName === 'path';
+    if (isSvgPath) {
+      e.stopPropagation();
+    }
+  },
+  stopPropagation: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    e.stopPropagation();
+  },
+};
+//
+// const ModalRwd = (isMobileLayout: boolean) => {
+//   return {
+//     Container: isMobileLayout
+//       ? WorldLocationModalMobile.Container
+//       : WorldLocationModalDesktop.Container,
+//     LeftStory: isMobileLayout
+//       ? WorldLocationModalMobile.LeftStory
+//       : WorldLocationModalDesktop.LeftStory,
+//     RightPayment: isMobileLayout
+//       ? WorldLocationModalMobile.RightPayment
+//       : WorldLocationModalDesktop.RightPayment,
+//   };
+// };
+
+type ModalContentRwdProps = Omit<LeftStoryProps, 'onClickLeftButton'> &
+  RightPaymentProps;
+export const ContentRwd: FC<ModalContentRwdProps> = ({
   walletAddress,
+  packTemplate,
   landmark,
   pack,
+  dismissModalFn,
+  switchLandmarkFn,
 }) => {
   return (
-    <PaymentContainer onClick={(e) => e.stopPropagation()}>
-      <PurchaseNFTContainer
+    <>
+      <WorldLocationModalDesktop.OutlineContainer
+        display={['none', 'none', 'flex']}
+      >
+        <WorldLocationModalDesktop.LeftStory
+          landmark={landmark}
+          pack={pack}
+          onClickLeftButton={dismissModalFn}
+        />
+        <WorldLocationModalDesktop.RightPayment
+          dismissModalFn={dismissModalFn}
+          switchLandmarkFn={switchLandmarkFn}
+          packTemplate={packTemplate}
+          walletAddress={walletAddress}
+          landmark={landmark}
+          pack={pack}
+        />
+      </WorldLocationModalDesktop.OutlineContainer>
+      <WorldLocationModalMobile.PaymentAndStory
         dismissModalFn={dismissModalFn}
         switchLandmarkFn={switchLandmarkFn}
-        defaultPaymentMethod={PaymentStageEnum.WORLD_PACK}
-        essenceId={packTemplate?.essence_uuid ?? 0}
-        essence={packTemplate}
+        packTemplate={packTemplate}
         walletAddress={walletAddress}
-        pack={pack}
         landmark={landmark}
+        pack={pack}
       />
-    </PaymentContainer>
+    </>
   );
 };
+export const Container = styled.div<
+  BorderProps & ColorProps & LayoutProps & SpaceProps
+>`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  box-shadow: 3px 10px 4px rgba(0, 0, 0, 0.25);
+  overflow-y: scroll;
+  position: relative;
+  ${layout};
+  ${border};
+  ${space};
+  ${color};
 
-export const Modal = {
-  Container,
-  LeftStory,
-  RightPayment,
-};
+  &::-webkit-scrollbar {
+    width: 14px;
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    border: 4px solid rgba(0, 0, 0, 0);
+    border-radius: 9999px;
+    background-clip: padding-box;
+    background-color: #aaaaaa80;
+  }
+`;

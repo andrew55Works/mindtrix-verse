@@ -66,8 +66,6 @@ export const PurchaseChooseStableCoin: FC<Props> = () => {
     setIsShowLoadingLogo,
   );
   const selectedSymbol = selectedCoin?.symbol ?? 'USDC';
-  const isNeedRefetchingChildAccount =
-    childAccountInfo?.isCreatingChildAccount ?? false;
 
   const text = {
     h4_selected_coin: 'Selected coin',
@@ -230,8 +228,11 @@ export const PurchaseChooseStableCoin: FC<Props> = () => {
         appearance={'filled'}
         disabled={purchaseButtonStatus?.disability ?? true}
         size={'large'}
-        status={'primary'}
+        status={'basic'}
         fontSize={'20px'}
+        backgroundColor={'#ffffff'}
+        color={'#000000'}
+        border={'1px #000000 solid'}
         marginBottom={'12px'}
         mx={0}
         height={'50px'}
@@ -247,9 +248,10 @@ export const PurchaseChooseStableCoin: FC<Props> = () => {
       <Button.Square
         appearance={'outline'}
         size={'medium'}
-        status={'primary'}
+        status={'basic'}
         fontSize={'5'}
         fontWeight={'bold'}
+        border={'1px #000000 solid'}
         mx={0}
         height={'50px'}
         width={'100%'}
@@ -268,6 +270,9 @@ export const PurchaseChooseStableCoin: FC<Props> = () => {
         size={'large'}
         status={'disabled'}
         fontSize={'16px'}
+        backgroundColor={'#ffffff'}
+        color={'#000000'}
+        border={'1px #000000 solid'}
         marginBottom={'12px'}
         mx={0}
         width={'100%'}
@@ -290,6 +295,9 @@ export const PurchaseChooseStableCoin: FC<Props> = () => {
         marginBottom={'12px'}
         mx={0}
         width={'100%'}
+        backgroundColor={'#ffffff'}
+        color={'#000000'}
+        border={'1px #000000 solid'}
         flexDirection={'row'}
         alignItems={'center'}
         justifyContent={'center'}
@@ -297,7 +305,7 @@ export const PurchaseChooseStableCoin: FC<Props> = () => {
         svgWidth={'30px'}
         svgMarginLeft={'-35px'}
         LeftImage={<MoonPaySvg />}
-        paddingLeft={0}
+        paddingLeft={'12px'}
         paddingRight={'24px'}
         onClick={onClick.buyCoins}
         children={
@@ -318,12 +326,15 @@ export const PurchaseChooseStableCoin: FC<Props> = () => {
         marginBottom={'12px'}
         mx={0}
         width={'100%'}
+        backgroundColor={'#ffffff'}
+        color={'#000000'}
+        border={'1px #000000 solid'}
         justifyContent={'center'}
         svgHeight={'30px'}
         svgWidth={'30px'}
         svgMarginLeft={'-26px'}
         LeftImage={<IncrementFi />}
-        paddingLeft={0}
+        paddingLeft={'12px'}
         paddingRight={'24px'}
         onClick={onClick.swapCoins}
         children={
@@ -348,6 +359,9 @@ export const PurchaseChooseStableCoin: FC<Props> = () => {
         marginBottom={'12px'}
         mx={0}
         width={'100%'}
+        backgroundColor={'#ffffff'}
+        color={'#000000'}
+        border={'1px #000000 solid'}
         flexDirection={'row'}
         alignItems={'center'}
         justifyContent={'center'}
@@ -355,7 +369,7 @@ export const PurchaseChooseStableCoin: FC<Props> = () => {
         svgWidth={'30px'}
         svgMarginLeft={'-20px'}
         LeftImage={<CbridgeSvg />}
-        paddingLeft={0}
+        paddingLeft={'12px'}
         paddingRight={'24px'}
         onClick={onClick.bridgeCoins}
         children={
@@ -371,7 +385,7 @@ export const PurchaseChooseStableCoin: FC<Props> = () => {
       <Button.Square
         appearance={'outline'}
         size={'medium'}
-        status={'primary'}
+        status={'basic'}
         fontSize={'5'}
         fontWeight={'bold'}
         mx={0}

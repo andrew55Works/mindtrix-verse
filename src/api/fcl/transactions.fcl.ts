@@ -2,9 +2,8 @@
 import * as fcl from '@onflow/fcl';
 // @ts-ignore
 import * as t from '@onflow/types';
-import list_for_sale from '../../cadence/transactions/marketplace/list_for_sale.cdc';
-import unlist_from_sale from '../../cadence/transactions/marketplace/unlist_from_sale.cdc';
 import setup_nft_collection from '../../cadence/transactions/nft/setup_nft_collection.cdc';
+import setup_float_nft_collection from '../../cadence/transactions/nft/setup_float_nft_collection.cdc';
 import create_audio_essences from '../../cadence/transactions/essence/create_audio_essences.cdc';
 import create_template from '../../cadence/transactions/template/create_template.cdc';
 import dapper_setup_duc_fut_receiver from '../../cadence/transactions/nft/dapper_setup_duc_fut_receiver.cdc';
@@ -12,7 +11,6 @@ import dapper_create_listing_fut from '../../cadence/transactions/marketplace/da
 import dapper_mint_nft_from_template_with_duc_fut from '../../cadence/transactions/nft/mint_nft_from_template_with_duc_fut.cdc';
 import mint_nft_from_template_with_fiat_token from '../../cadence/transactions/nft/mint_nft_from_template_with_fiat_token.cdc';
 import free_mint_nft_from_template from '../../cadence/transactions/nft/free_mint_nft_from_template.cdc';
-import burn_nfts from '../../cadence/transactions/nft/burn_nfts.cdc';
 import add_as_child_multisig from '../../cadence/transactions/child_account/add_as_child_multisig.cdc';
 import {
   NFTStructReq,
@@ -46,6 +44,22 @@ const safeSendFcl = (builders: Array<any>): Promise<SafeFclResponse> => {
     .catch((err: Error) => {
       return ['', err];
     });
+};
+
+export const setupFloatNFTCollection = async () => {
+  const transactionId = await fcl
+    .send([
+      fcl.transaction(setup_float_nft_collection),
+      fcl.args([]),
+      fcl.payer(fcl.authz),
+      fcl.proposer(fcl.authz),
+      fcl.authorizations([fcl.authz]),
+      fcl.limit(9999),
+    ])
+    .then(fcl.decode);
+
+  console.info(transactionId);
+  return fcl.tx(transactionId).onceSealed();
 };
 
 export const setupNFTCollection = async () => {
@@ -237,9 +251,7 @@ export const buyNftWithDapperPayment = (templateId: number) => {
   const merchantAddress = getDapperMerchantAddress();
 
   return safeSendFcl([
-    // fcl.transaction(dapper_mint_single_donation_duc),
     fcl.transaction(dapper_mint_nft_from_template_with_duc_fut),
-    // fcl.transaction(dapper_mint_nft_from_template_with_flow),
     fcl.args([
       fcl.arg(merchantAddress, t.Address),
       fcl.arg(templateId, t.UInt64),
@@ -269,49 +281,6 @@ export const createDapperListingFut = (
       fcl.arg(expiry, t.UInt64),
       fcl.arg(customID, t.String),
     ]),
-    fcl.payer(fcl.authz),
-    fcl.proposer(fcl.authz),
-    fcl.authorizations([fcl.authz]),
-    fcl.limit(9999),
-  ]);
-};
-
-export const listForSale = async (id: string, price: string) => {
-  const transactionId = await fcl
-    .send([
-      fcl.transaction(list_for_sale),
-      fcl.args([fcl.arg(parseInt(id, 10), t.UInt64), fcl.arg(price, t.UFix64)]),
-      fcl.payer(fcl.authz),
-      fcl.proposer(fcl.authz),
-      fcl.authorizations([fcl.authz]),
-      fcl.limit(9999),
-    ])
-    .then(fcl.decode);
-
-  console.info(transactionId);
-  return fcl.tx(transactionId).onceSealed();
-};
-
-export const unlistFromSale = async (id: string) => {
-  const transactionId = await fcl
-    .send([
-      fcl.transaction(unlist_from_sale),
-      fcl.args([fcl.arg(parseInt(id, 10), t.UInt64)]),
-      fcl.payer(fcl.authz),
-      fcl.proposer(fcl.authz),
-      fcl.authorizations([fcl.authz]),
-      fcl.limit(9999),
-    ])
-    .then(fcl.decode);
-
-  console.info(transactionId);
-  return fcl.tx(transactionId).onceSealed();
-};
-
-export const burnNFTs = async (nftIds: Array<number>) => {
-  return safeSendFcl([
-    fcl.transaction(burn_nfts),
-    fcl.args([fcl.arg(nftIds, t.Array(t.UInt64))]),
     fcl.payer(fcl.authz),
     fcl.proposer(fcl.authz),
     fcl.authorizations([fcl.authz]),

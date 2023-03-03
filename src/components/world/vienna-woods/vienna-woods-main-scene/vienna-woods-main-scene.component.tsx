@@ -24,6 +24,7 @@ import FramerModal from '../../../common/modal/framer-modal';
 import { useMarketplaceBuyingI18n } from '../../../../hooks/i18n/i18n-marketplace.hooks';
 import { ViennaWoodsContext } from '../../../../pages/world/vienna-woods';
 import { ChildAccountInfo } from '../../../../types/creator.type';
+import { useScreenHeight } from '../../../../hooks/window/resize.hooks';
 
 interface Props {
   isShow: boolean;
@@ -48,6 +49,7 @@ export const ViennaWoodsMainScene: FC<Props> = ({
   landmarkModalInfo: { pack, landmark },
 }) => {
   const viennaWoodsContext = useContext(ViennaWoodsContext);
+  const { screenSize } = useScreenHeight();
   const childAccountInfo =
     viennaWoodsContext?.childAccountInfo ?? new ChildAccountInfo();
   const setChildAccountInfo = viennaWoodsContext?.setChildAccountInfo;
@@ -216,6 +218,7 @@ export const ViennaWoodsMainScene: FC<Props> = ({
     isMintingSuccess: isMintingPackSuccess,
     walletAddress: collectorWalletAddress,
     marketplaceText,
+    screenSize,
   });
 
   return (

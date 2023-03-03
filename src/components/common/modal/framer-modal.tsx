@@ -38,7 +38,6 @@ const FramerModal: FC<FramerModalProps> = ({
   style,
 }) => {
   const modalPadding = style?.padding ?? '30px 20px 20px 20px';
-  const transitionY = style?.transitionY ?? '300px';
   const maxHeight = style?.maxHeight ?? '66%';
   const _onClick = {
     backgroundCover: () => {
@@ -59,7 +58,7 @@ const FramerModal: FC<FramerModalProps> = ({
         >
           <motion.div
             style={_style.modal(modalPadding, maxHeight, maxWidth)}
-            variants={framerVariants.modal(transitionY)}
+            variants={framerVariants.modal}
             onClick={(e) => e.stopPropagation()}
           >
             <Modal.Button.HeaderCross

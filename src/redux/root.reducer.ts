@@ -1,15 +1,11 @@
 import { combineReducers } from '@reduxjs/toolkit';
 import essenceSlice, { EssenceSliceState } from './essence/essence.slice';
-import breadcrumbSlice, {
-  BreadcrumbSliceState,
-} from './breadcrumb/breadcrumb.slice';
 import creatorSlice, {
   CreatorProfileSliceState,
 } from './creator/creator.slice';
 import collectorSlice, {
   CollectorProfileSliceState,
 } from './collector/collector.slice';
-import { panGuApi } from '../api/restful/pangu.query';
 import { PersistConfig, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import sessionStorage from 'redux-persist/lib/storage/session';
@@ -31,7 +27,6 @@ export const STORAGE_KEY = {
 };
 
 interface SessionStorageState {
-  breadcrumbSlice: BreadcrumbSliceState;
   collectorSlice: CollectorProfileSliceState;
   creatorSlice: CreatorProfileSliceState;
   currencySlice: CurrencySliceState;
@@ -79,7 +74,6 @@ const storageReducer = {
   encryptSessionStorageReducer: persistReducer(
     persistConfig.encryptedSessionStorage(),
     combineReducers({
-      breadcrumbSlice,
       collectorSlice,
       creatorSlice,
       currencySlice,
@@ -99,7 +93,6 @@ const storageReducer = {
 const rootReducer = combineReducers({
   encryptedLocalStorage: storageReducer.encryptedLocalStorage,
   encryptedSessionStorage: storageReducer.encryptSessionStorageReducer,
-  [panGuApi.reducerPath]: panGuApi.reducer,
   [coinGeckoApi.reducerPath]: coinGeckoApi.reducer,
 });
 export type RootState = ReturnType<typeof rootReducer>;

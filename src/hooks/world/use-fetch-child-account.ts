@@ -1,14 +1,14 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { CreatorProfile } from '../../redux/creator/creator.interface';
 import { initialCreatorState } from '../../redux/creator/creator.slice';
 import { ChildAccountInfo } from '../../types/creator.type';
-import { Wallet } from '../../types/wallet.type';
 import { fetchTokenBalancesAndUpdateSlice } from '../../services/flow/script/get-flow-balance.script';
 import { MindtrixUserEnum } from '../wallet/wallet.hooks';
 import { AppDispatch } from '../../redux/store';
 import { useQuery } from '@apollo/client';
 import { GetChildAccountByEmailRes } from '../../api/types/user.types';
 import { GQL_FIND_CHILD_ACCOUNT_BY_EMAIL } from '../../api/graphql/user.graphql';
+import { getDefaultChildAccountWallet } from '../../utils/wallet.utils';
 
 export const useFetchChildAccount = (
   childAccountInfo: ChildAccountInfo,
@@ -20,9 +20,11 @@ export const useFetchChildAccount = (
     useQuery<GetChildAccountByEmailRes>(GQL_FIND_CHILD_ACCOUNT_BY_EMAIL, {
       skip: true,
     });
+  const isFetchFirstTime = useRef(false);
 
   useEffect(() => {
     const getChildAccountAndUpdateState = async () => {
+      if (setIsShowLoadingLogo) setIsShowLoadingLogo(true);
       const googleEmail = childAccountInfo?.email ?? '';
       const childAccountRes = await getChildAccountByEmail({
         email: googleEmail,
@@ -43,29 +45,10 @@ export const useFetchChildAccount = (
         setChildAccountInfo(childAccountInfoTmp);
         setIsShowLoadingLogo(false);
       }
-
-      const wallet: Wallet = {
-        blocto: {
-          address: childAccountAddress,
-          balance: {
-            flow: {
-              num: 0,
-              str: '0',
-            },
-            usdc: {
-              num: 0,
-              str: '0',
-            },
-            fusd: {
-              num: 0,
-              str: '0',
-            },
-          },
-          cid: '',
-          email: googleEmail,
-          loggedIn: true,
-        },
-      };
+      const wallet = getDefaultChildAccountWallet(
+        childAccountAddress,
+        googleEmail,
+      );
       await fetchTokenBalancesAndUpdateSlice(
         childAccountAddress,
         dispatch,
@@ -74,11 +57,12 @@ export const useFetchChildAccount = (
         userVo,
       );
     };
-    const isNeedRefetchChildAccount =
-      childAccountInfo?.isCreatingChildAccount ?? false;
-    if (isNeedRefetchChildAccount && setIsShowLoadingLogo) {
-      setIsShowLoadingLogo(true);
+    // immediately fetch for the first time
+    if (!isFetchFirstTime.current && (childAccountInfo?.email ?? '')) {
+      getChildAccountAndUpdateState();
+      isFetchFirstTime.current = true;
     }
+
     const timer = setInterval(() => {
       const isNeedRefetchChildAccountInner =
         childAccountInfo?.isCreatingChildAccount ?? false;

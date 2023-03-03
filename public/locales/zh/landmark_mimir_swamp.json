@@ -1,4 +1,5 @@
 {
+  "card_landmark_utility": "獲得特殊升級道具\n例如：透過取得升級道具，您可升級 Otter NFT 的配件，這將使您的 NFT 更具品味、稀缺性。",
   "card_pack_inventory": "<0>{{pack_remain}}</0> / <1>{{pack_all}}</1>",
   "card_pack_name": "冶煉降落包",
   "card_title_landmark": "密米爾沼澤",

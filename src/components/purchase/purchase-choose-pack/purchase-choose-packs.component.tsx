@@ -46,7 +46,6 @@ export const PurchaseChoosePacks: FC<Props> = ({
           <Text.h2
             key='0'
             status={'basic'}
-            color={'#ffffff'}
             my={0}
             mx={'2px'}
             children={priceUSD}
@@ -123,11 +122,14 @@ export const PurchaseChoosePacks: FC<Props> = ({
       <Button.Square
         appearance={'filled'}
         size={'large'}
-        status={'primary'}
+        status={'basic'}
         fontSize={'20px'}
         marginTop={'20px'}
         marginBottom={'12px'}
         mx={0}
+        color={'#000000'}
+        backgroundColor={'#ffffff'}
+        border={'2px #000000 solid'}
         width={'100%'}
         svgHeight={'28px'}
         svgWidth={'28px'}

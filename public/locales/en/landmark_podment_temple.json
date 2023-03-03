@@ -1,4 +1,5 @@
 {
+  "card_landmark_utility": "Get governance permissions\nFor example: Obtain voting rights by acquiring Mindtrix tokens($MIND) and determine the future direction of the Mindtrix platform.",
   "card_pack_inventory": "<0>{{pack_remain}}</0> /<1>{{pack_all}}</1>",
   "card_pack_name": "Governance Pack",
   "card_title_landmark": "Podment Temple",

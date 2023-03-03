@@ -1,4 +1,5 @@
 {
+  "card_landmark_utility": "獲得治理\b權限\n例如：透過取得 Mindtrix 治理代幣以獲得投票權，並決定 Mindtrix 平台未來方向。",
   "card_pack_inventory": "<0>{{pack_remain}}</0> / <1>{{pack_all}}</1>",
   "card_pack_name": "治理降落包",
   "card_title_landmark": "帕德門神廟",

@@ -1,9 +1,7 @@
 import React, { FC, useContext } from 'react';
-import * as S from './purchase-nft.styles';
 import { PaymentMain } from './purchase-nft.styles';
 import { CoinMap } from '../../api/types/currency.types';
 import { getStableCoinCurrencyInfo } from '../../utils/token.utils';
-import { CommonFlexContainer } from '../common/flexbox/common-flex.styles';
 import {
   PaymentStageEnum,
   useSelectedPaymentMethod,
@@ -59,6 +57,7 @@ export const PurchaseNFTContainer: FC<Props> = ({
   defaultPaymentMethod,
   essence,
   essenceId,
+  landmark,
   walletAddress,
 }) => {
   const viennaWoodsContext = useContext(ViennaWoodsContext);
@@ -78,12 +77,6 @@ export const PurchaseNFTContainer: FC<Props> = ({
   const { selectedPaymentStage, setSelectedPaymentStage } =
     useSelectedPaymentMethod(defaultPaymentMethod);
 
-  const text = {
-    h4_free_price: 'Free',
-    h4_need_help: 'Need helps?',
-    h4_contact_support: 'Contact support',
-    tooltip_price_explanation: 'USD',
-  };
   const isFree = priceFloat <= 0;
   const isLoading = viennaWoodsContext?.isShowLoadingLogo ?? false;
   const setIsLoading = viennaWoodsContext?.setIsShowLoadingLogo;
@@ -107,28 +100,14 @@ export const PurchaseNFTContainer: FC<Props> = ({
     switchLandmarkFn,
     walletAddress,
   };
-
   return (
     <PurchaseContext.Provider value={context}>
-      <S.Container>
-        <CommonFlexContainer
-          flexDirection={'column'}
-          justifyContent={'flex-start'}
-          alignSelf={'center'}
-          width={'100%'}
-        >
-          <PackS.PaymentPackInfo />
-          <PaymentMain
-            dismissModalFn={dismissModalFn}
-            selectedPaymentStage={selectedPaymentStage}
-            switchLandmarkFn={switchLandmarkFn}
-          />
-        </CommonFlexContainer>
-        <S.SupportLinkText
-          preText={text.h4_need_help}
-          postText={text.h4_contact_support}
-        />
-      </S.Container>
+      <PackS.PaymentPackInfo />
+      <PaymentMain
+        dismissModalFn={dismissModalFn}
+        selectedPaymentStage={selectedPaymentStage}
+        switchLandmarkFn={switchLandmarkFn}
+      />
     </PurchaseContext.Provider>
   );
 };

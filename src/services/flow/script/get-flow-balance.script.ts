@@ -14,10 +14,6 @@ import {
 import { BalanceDicRes } from '../../../types/on-chain.type';
 import { _get } from '../../../utils/lodash.utils';
 
-interface FlowTokenBalance {
-  address: string;
-  balance: number;
-}
 export const fetchTokenBalancesAndUpdateSlice = async (
   address: string | null,
   dispatch: AppDispatch,

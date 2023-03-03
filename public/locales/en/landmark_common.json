@@ -10,5 +10,7 @@
   "card_purchase_notes_hover": "1. An account can buy only one pack from each landmark.\n2. An account can buy up to three packs from different landmarks.",
   "card_supports": "Need help? Please contact support.",
   "card_tab_pack_information": "Pack Information",
-  "card_tab_utility": "Utility"
+  "card_tab_utility": "Utility",
+  "modal_tab_pack": "Pack",
+  "modal_tab_story": "Story"
 }

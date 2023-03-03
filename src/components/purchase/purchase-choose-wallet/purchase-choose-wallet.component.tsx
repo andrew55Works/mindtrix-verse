@@ -16,7 +16,10 @@ import { ProductTypeEnum } from '../../navigation';
 import { useMutation } from '@apollo/client';
 import { PostCreateSsoUserAndBindChildWalletAccountRes } from '../../../api/types/nft.types';
 import { GQL_CREATE_SSO_USER_AND_BIND_CHILD_WALLET_ACCOUNT } from '../../../api/graphql/user.graphql';
-import { ChildAccountInfo } from '../../../types/creator.type';
+import {
+  ChildAccountInfo,
+  ChildWalletAccount,
+} from '../../../types/creator.type';
 
 interface Props {}
 
@@ -44,15 +47,22 @@ export const PurchaseChooseWallet: FC<Props> = () => {
   useEffect(() => {
     const isSealed = tx?.isSealed ?? false;
     const isModalDismissed = !(tx?.isShow ?? false);
-    if (isSealed && isModalDismissed) {
-      const isSuccess = (tx?.transactionStatus ?? -1) === 4;
+    const childAccountPubKey =
+      childAccountInfo?.child_wallet_account?.keypair?.publicKey ?? '';
+    if ((isSealed && isModalDismissed) || !!childAccountPubKey) {
+      const isSuccess =
+        (tx?.transactionStatus ?? -1) === 4 || !!childAccountPubKey;
       if (isSuccess) {
         const isCreatingChildAccount =
           childAccountInfo?.isCreatingChildAccount ?? false;
-        console.info('setSelectedPaymentMethod:', setSelectedPaymentMethod);
-        if (isCreatingChildAccount && setSelectedPaymentMethod) {
+        if (
+          (isCreatingChildAccount || !!childAccountPubKey) &&
+          setSelectedPaymentMethod
+        ) {
           setSelectedPaymentMethod(PaymentStageEnum.CRYPTO_COINS);
         }
+      } else {
+        if (setIsShowLoadingLogo) setIsShowLoadingLogo(false);
       }
     }
   }, [tx, childAccountInfo]);
@@ -71,12 +81,10 @@ export const PurchaseChooseWallet: FC<Props> = () => {
       if (setIsShowLoadingLogo) setIsShowLoadingLogo(true);
       const { googleUser, googleAccessToken } =
         await FirebaseAuth.signInWithPopup();
-      console.info('googleUser:', googleUser);
       const email = googleUser?.email ?? '';
       const photoURL = googleUser?.photoURL ?? '';
       const firebaseUid = googleUser?.uid ?? '';
       const providerId = googleUser?.providerId ?? '';
-      console.info('providerId:', providerId);
 
       const variables = {
         dto: {
@@ -135,15 +143,32 @@ export const PurchaseChooseWallet: FC<Props> = () => {
       const childAccount = new ChildAccountInfo();
       childAccount.email = email;
       childAccount.isCreatingChildAccount = true;
-      console.info('childAccount:', childAccount);
       if (setChildAccountInfo) setChildAccountInfo(childAccount);
-      if (showTxStatusModal) showTxStatusModal();
       const res = await createSsoUserAndBindChildWalletAccount({ variables });
       const sealedRes =
         res?.data?.createSsoUserAndBindChildWalletAccountFromMindtrix;
-      const txTmp = sealedRes?.transactionId ?? '';
-      if (setSealedRes) {
-        setSealedRes([txTmp, undefined]);
+      const emailFromDB = sealedRes?.email ?? '';
+      const isEmailAlreadyExist = !!emailFromDB && emailFromDB === email;
+      if (isEmailAlreadyExist && childAccount) {
+        const childWalletAccountFromDB =
+          sealedRes?.child_wallet_account ?? new ChildWalletAccount();
+        const childAccount2 = new ChildAccountInfo();
+        childAccount2._id = sealedRes?._id ?? '';
+        childAccount2.email = emailFromDB;
+        const newChildWalletAccount = new ChildWalletAccount();
+        newChildWalletAccount.keypair.publicKey =
+          childWalletAccountFromDB?.keypair?.publicKey ?? '';
+        newChildWalletAccount.address = childWalletAccountFromDB?.address ?? '';
+        childAccount2.child_wallet_account = newChildWalletAccount;
+        childAccount2.isCreatingChildAccount = false;
+        if (setChildAccountInfo) setChildAccountInfo(childAccount2);
+      } else {
+        if (showTxStatusModal) showTxStatusModal();
+        // wait for the transaction sealed
+        const txTmp = sealedRes?.transactionId ?? '';
+        if (setSealedRes) {
+          setSealedRes([txTmp, undefined]);
+        }
       }
       setParentEmail(email);
       // await onClick.multisign(parentEmail);
@@ -167,6 +192,9 @@ export const PurchaseChooseWallet: FC<Props> = () => {
         size={'large'}
         status={'primary'}
         fontSize={'20px'}
+        backgroundColor={'#ffffff'}
+        color={'#000000'}
+        border={'1px #000000 solid'}
         marginBottom={'12px'}
         mx={0}
         height={'50px'}
@@ -185,6 +213,9 @@ export const PurchaseChooseWallet: FC<Props> = () => {
         disabled={isCreatingAccount}
         status={'primary'}
         fontSize={'20px'}
+        backgroundColor={'#ffffff'}
+        color={'#000000'}
+        border={'1px #000000 solid'}
         marginBottom={'12px'}
         mx={0}
         height={'50px'}

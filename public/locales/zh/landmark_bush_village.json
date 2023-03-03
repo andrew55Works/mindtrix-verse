@@ -1,4 +1,5 @@
 {
+  "card_landmark_utility": "獲得特殊展間裝飾\n例如：在未來的數位展間 NFT 中，您可使用特殊主題、壁紙、櫥櫃來裝飾您的展間，這將使您的 NFT 更具品味、稀缺性。",
   "card_pack_inventory": "<0>{{pack_remain}}</0> / <1>{{pack_all}}</1>",
   "card_pack_name": "營建降落包",
   "card_title_landmark": "灌木村",

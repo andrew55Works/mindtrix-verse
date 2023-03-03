@@ -38,27 +38,30 @@ https://www.mindtrix.xyz
 
 */
 
-import FungibleToken from 0x9a0766d93b6608b7
-import NonFungibleToken from 0x631e88ae7f1d7c20
-import MetadataViews from 0x631e88ae7f1d7c20
+import FungibleToken from 0xee82856bf20e2aa6
+import NonFungibleToken from 0xf8d6e0586b0a20c7
+import MetadataViews from 0xf8d6e0586b0a20c7
+import MindtrixViews from 0xf8d6e0586b0a20c7
+import MindtrixEssence from 0xf8d6e0586b0a20c7
 
 pub contract Mindtrix: NonFungibleToken {
-
 
  // ========================================================
  //                          PATH
  // ========================================================
 
     pub let RoyaltyReceiverPublicPath: PublicPath
-    pub let CollectionStoragePath: StoragePath
-    pub let CollectionPublicPath: PublicPath
-    pub let MinterStoragePath: StoragePath
+    pub let MindtrixCollectionStoragePath: StoragePath
+    pub let MindtrixCollectionPublicPath: PublicPath
 
  // ========================================================
  //                          EVENT
  // ========================================================
 
     pub event ContractInitialized()
+    pub event NFTMinted(id: UInt64, essenceId: String, showGuid: String, episodeGuid: String, nftEdition: UInt64, name: String, nftFileIPFSUrl: String, serial: String, royaltyRecipient: [Address])
+    pub event NFTFreeMinted(essenceId: UInt64, minter: Address, essenceName: String, essenceDescription: String, essenceFileIPFSCid: String, essenceFileIPFSDirectory: String)
+    pub event NFTDestroyed(id: UInt64, essenceId: String, showGuid: String, episodeGuid: String, nftEdition: UInt64, name: String, serial: String)
     pub event Withdraw(id: UInt64, from: Address?)
     pub event Deposit(id: UInt64, to: Address?)
 
@@ -69,76 +72,88 @@ pub contract Mindtrix: NonFungibleToken {
     pub var totalSupply: UInt64
 
  // ========================================================
- //                      IMMUTABLE STATE
- // ========================================================
-
-    pub let AdminAddress: Address
-
- // ========================================================
- //                           ENUM
- // ========================================================
-
-    pub enum FirstSerial: UInt8 {
-        pub case voice
-    }
-
-    pub enum VoiceSerial: UInt8 {
-        // audio = 0 + 1 = 1 in Serial, 0 is a reserved number
-        pub case audio
-        // image = 1 + 1 = 2 in Serial
-        pub case image
-        // quest = 2 + 1 = 3 in Serial
-        pub case quest
-    }
-
- // ========================================================
  //               COMPOSITE TYPES: STRUCTURE
  // ========================================================
 
-    pub struct SerialGenuses {
-        pub let infoList: [SerialGenus]
+    pub struct NFTStruct {
+        pub var nftId: UInt64?
+        pub let essenceId: UInt64
+        pub let createdTime: UFix64
+        pub var nftEdition: UInt64?
+        pub var currentHolder: Address
+        access(self) let royalties: [MetadataViews.Royalty]
+        access(account) let metadata: {String: String}
+        pub let socials: {String: String}
+        pub var components: {String: UInt64}
 
-        init(infoList: [SerialGenus]) {
-            self.infoList = infoList
+        init(
+            nftId: UInt64?,
+            essenceId: UInt64,
+            nftEdition: UInt64?,
+            currentHolder: Address,
+            createdTime: UFix64,
+            royalties: [MetadataViews.Royalty],
+            metadata: {String: String},
+            socials: {String: String},
+            components: {String: UInt64},
+        ){
+            self.nftId = nftId
+            self.essenceId = essenceId
+            self.nftEdition = nftEdition
+            self.currentHolder = currentHolder
+            self.createdTime = createdTime
+            self.royalties = royalties
+            self.metadata = metadata
+            self.socials = socials
+            self.components = components
+        }
+
+        pub fun getMetadata(): {String: String}{
+            return self.metadata
+        }
+
+        pub fun updateNFTId(nftId :UInt64){
+            self.nftId = nftId
+        }
+
+        pub fun getRoyalties(): [MetadataViews.Royalty] {
+            return self.royalties
+        }
+
+        pub fun getAudioEssence(): MindtrixViews.AudioEssence {
+            return MindtrixViews.AudioEssence(
+                startTime: self.metadata["audioStartTime"] ?? "0",
+                endTime: self.metadata["audioEndTime"] ?? "0",
+                fullEpisodeDuration: self.metadata["fullEpisodeDuration"] ?? "0"
+            )
         }
     }
 
-    pub struct SerialGenus  {
-        // number 1 here is defined as the top tier
-        pub let tier: UInt8
-        pub let name: String
-        pub let description: String?
-        pub let number: Number
 
-        init(tier: UInt8,number: Number, name: String, description: String?) {
-            self.tier = tier
-            self.number = number
-            self.name = name
-            self.description = description
+    // EssenceToNFTId is a helper struct and stores collector's all Mindtrix NFTs mapping to a specific collection
+    pub struct EssenceToNFTId {
+        access(account) var dic: {UInt64: {UInt64: Bool}}
+        access(account) fun addNFT(collectionId:UInt64, nftId: UInt64): Void {
+            self.dic.insert(key: collectionId, {nftId: true})
         }
-    }
-
-    // AudioEssence struct is optional and only exists when an NFT is a VoiceSerial.essence.
-    pub struct AudioEssence  {
-        // e.g. startTime = 96 = 00:01:36
-        pub let startTime: UInt16?
-        // e.g. endTime = 365 = 00:06:05
-        pub let endTime: UInt16?
-        // e.g. originalDuration = 1864 = 00:31:04
-        pub let originalDuration: UInt16?
-
-        init(startTime: UInt16?, endTime: UInt16?, originalDuration: UInt16?) {
-            self.startTime = startTime
-            self.endTime = endTime
-            self.originalDuration = originalDuration
+        access(account) fun removeNFT(collectionId:UInt64, nftId: UInt64): Void {
+            self.dic[collectionId]!.remove(key: nftId)
         }
-    }
+        access(account) fun getOwnedNFTIdsFromCollection(collectionId: UInt64): [UInt64] {
+            let nftIds: [UInt64] = []
+            let nftIdsFromCollection = self.dic[collectionId]!
+            if nftIdsFromCollection.length > 0 {
+                for nftId in nftIdsFromCollection.keys {
+                    if nftIdsFromCollection[nftId] != nil {
+                        nftIds.append(nftId)
+                    }
+                }
+            }
+            return nftIds
+        }
 
-    pub struct SerialString {
-        pub let str: String
-
-        init(str: String) {
-            self.str = str
+        init(){
+            self.dic = {}
         }
     }
 
@@ -146,81 +161,59 @@ pub contract Mindtrix: NonFungibleToken {
  //               COMPOSITE TYPES: RESOURCE
  // ========================================================
 
-    pub resource NFT: NonFungibleToken.INFT, MetadataViews.Resolver {
+    pub resource NFT: NonFungibleToken.INFT, MetadataViews.Resolver, INFT {
+
+        // Though the id exists in NFTStruct, it should not be removed to implement the INFT.
         pub let id: UInt64
+        pub var data: NFTStruct
 
-        pub let name: String
-        pub let description: String
-        pub let thumbnail: String
-        pub let ipfsCid: String
-        pub let ipfsDirectory: String
-        access(self) let royalties: [MetadataViews.Royalty]
-        access(self) let metadata: {String: AnyStruct}
+        init(data: NFTStruct) {
+            // Assign the id a UUID, not the totalSupply.
+            self.id = self.uuid
+            data.updateNFTId(nftId: self.id)
+            // Essence might be destroyed by some reasons, so it's nullable.
+            let essence = MindtrixEssence.getOneEssenceRes(essenceId: data.essenceId)
 
-        pub let collectionName: String
-        pub let collectionDescription: String
-        pub let collectionExternalURL: String
-        pub let collectionSquareImageUrl: String
-        pub let collectionSquareImageType: String
-        pub let collectionSocials: {String: String}
+            log("nft id:".concat(self.id.toString()))
 
-        pub let firstSerial: UInt16
-        pub let secondSerial: UInt16
-        pub let thirdSerial: UInt16
-        pub let fourthSerial: UInt32
-        pub let fifthSerial: UInt16
+            self.data = data
+            let royalties = data.getRoyalties()
 
-        pub let editionNumber: UInt64
-        pub let editionQuantity: UInt64
+            var royaltyRecipient: [Address] = []
+            for ele in royalties {
+                royaltyRecipient.append(ele.receiver.address)
 
-        pub let licenseIdentifier: String
+             }
 
-        init(
-            id: UInt64,
-            name: String,
-            description: String,
-            thumbnail: String,
-            ipfsCid: String,
-            ipfsDirectory: String,
-            royalties: [MetadataViews.Royalty],
-            collectionName: String,
-            collectionDescription: String,
-            collectionExternalURL: String,
-            collectionSquareImageUrl: String,
-            collectionSquareImageType: String,
-            collectionSocials: {String: String},
-            licenseIdentifier: String,
-            firstSerial: UInt16,
-            secondSerial: UInt16,
-            thirdSerial: UInt16,
-            fourthSerial: UInt32,
-            fifthSerial: UInt16,
-            editionNumber: UInt64,
-            editionQuantity: UInt64,
-            metadata: {String: AnyStruct}
-        ) {
-            self.id = id
-            self.name = name
-            self.description = description
-            self.thumbnail = thumbnail
-            self.ipfsCid = ipfsCid
-            self.ipfsDirectory = ipfsDirectory
-            self.royalties = royalties
-            self.collectionName = collectionName
-            self.collectionDescription = collectionDescription
-            self.collectionExternalURL = collectionExternalURL
-            self.collectionSquareImageUrl = collectionSquareImageUrl
-            self.collectionSquareImageType = collectionSquareImageType
-            self.collectionSocials = collectionSocials
-            self.licenseIdentifier = licenseIdentifier
-            self.firstSerial = firstSerial
-            self.secondSerial = secondSerial
-            self.thirdSerial = thirdSerial
-            self.fourthSerial = fourthSerial
-            self.fifthSerial = fifthSerial
-            self.editionNumber = editionNumber
-            self.editionQuantity = editionQuantity
-            self.metadata = metadata
+            let nftFileIPFSUrl = data.metadata["nftFileIPFSDirectory"]?.concat("/")?.concat(data.metadata["nftFileIPFSCid"] ?? "")
+            let templateId = self.data.metadata["templateId"] ?? nil
+            let essenceId = templateId != nil ? templateId! : self.data.metadata["essenceId"] ?? ""
+
+            emit NFTMinted(
+                id: self.id,
+                essenceId: essenceId,
+                showGuid: self.data.metadata["showGuid"] ?? "",
+                episodeGuid: self.data.metadata["episodeGuid"] ?? "",
+                nftEdition: self.data.nftEdition ?? 0,
+                name: data.metadata["nftName"] ?? "",
+                nftFileIPFSUrl: nftFileIPFSUrl ?? "",
+                serial: MindtrixViews.Serials(self.getSerialDic()).str,
+                royaltyRecipient: royaltyRecipient,
+            )
+            let identifier = MindtrixViews.NFTIdentifier(
+                uuid: self.id,
+                serial: data.nftEdition ?? 0,
+                holder: data.currentHolder,
+            )
+            if essence != nil {
+                // MindtrixEssence is the template of Mindtrix NFT, and it updates the dictionary between holders and NFT data whenever an NFT is minted.
+                essence?.updateMinters(address: data.currentHolder, nftIdentifier: identifier)
+                essence?.increaseCurrentEditionByOne()
+            }
+
+            MindtrixEssence.updateEsenceIdsToCreationIds(essenceId: data.essenceId, nftId: self.id)
+            Mindtrix.totalSupply = Mindtrix.totalSupply + 1
+
         }
 
         pub fun getViews(): [Type] {
@@ -234,73 +227,62 @@ pub contract Mindtrix: NonFungibleToken {
                 Type<MetadataViews.NFTCollectionData>(),
                 Type<MetadataViews.NFTCollectionDisplay>(),
                 Type<MetadataViews.Traits>(),
-                Type<Mindtrix.SerialString>(),
-                Type<Mindtrix.SerialGenuses>()
+                Type<MindtrixViews.Serials>(),
+                Type<MindtrixViews.EssenceIdentifier>()
             ]
         }
 
-        pub fun getSerialNumber(): UInt64 {
-            assert(self.firstSerial <= 18, message: "The first serial number should not be over 18 because the serial is an UInt64 number.")
-            let fullSerial = UInt64(self.firstSerial) * 1000000000000000000 +
-                UInt64(self.secondSerial) * 10000000000000000 +
-                UInt64(self.thirdSerial) * 10000000000000 +
-                UInt64(self.fourthSerial) * 100000000 +
-                UInt64(self.fifthSerial) * 100000 +
-                UInt64(self.editionNumber)
+        pub fun getSerialDic(): {String: String} {
+            return {
+                "essenceRealmSerial": self.data.metadata["essenceRealmSerial"] ?? "0",
+                "essenceTypeSerial": self.data.metadata["essenceTypeSerial"] ?? "0",
+                "showSerial": self.data.metadata["showSerial"] ?? "0",
+                "audioEssenceSerial": self.data.metadata["audioEssenceSerial"] ?? "0",
+                "nftEditionSerial": self.data.nftEdition?.toString() ?? "0"
+            }
+        }
 
-            return fullSerial;
+        pub fun getTemplateIdStr(): String {
+            let templateId = self.data.metadata["templateId"] ?? nil
+            let essenceId = self.data.metadata["essenceId"] ?? ""
+            return templateId != nil ? templateId! : essenceId
         }
 
         pub fun resolveView(_ view: Type): AnyStruct? {
             switch view {
                 case Type<MetadataViews.Display>():
+                    // Add different thumbnail
                     return MetadataViews.Display(
-                        name: self.name,
-                        description: self.description,
+                        name: self.data.metadata["nftName"] ?? "",
+                        description: self.data.metadata["nftDescription"] ?? "",
                         thumbnail: MetadataViews.HTTPFile(
-                            url: self.thumbnail
+                            url: self.data.metadata["nftImagePreviewUrl"] ?? ""
                         )
                     )
                 case Type<MetadataViews.ExternalURL>():
-                    // the URL will be replaced with a marketplace link in the future.
-                    return MetadataViews.ExternalURL(self.collectionExternalURL)
+                    let templateId = self.data.metadata["templateId"] ?? nil
+                    let essenceId = templateId != nil ? templateId! : self.data.metadata["essenceId"] ?? ""
+                    let nftName = self.data.metadata["nftName"] ?? ""
+                    return MetadataViews.ExternalURL("https://app.mindtrix.xyz/essence/".concat(essenceId).concat("--").concat(nftName))
                 case Type<MetadataViews.Editions>():
-                    // There is no max number of NFTs that can be minted from this contract
-                    // so the max edition field value is set to nil
-                    let editionInfo = MetadataViews.Edition(name: self.collectionName, number: self.editionNumber, max: self.editionQuantity)
+                    let editionInfo = MetadataViews.Edition(name: self.data.metadata["nftName"], number: self.data.nftEdition ?? 0, max: nil)
                     let editionList: [MetadataViews.Edition] = [editionInfo]
                     return MetadataViews.Editions(
                         editionList
                     )
-                case Type<MetadataViews.Serial>():
-                    return MetadataViews.Serial(self.getSerialNumber())
-                case Type<Mindtrix.SerialString>():
-                    return Mindtrix.SerialString(self.getSerialNumber().toString())
-                case Type<Mindtrix.SerialGenuses>():
-                    let first = Mindtrix.SerialGenus(tier: 1, number: self.firstSerial, name: "nftRealm", description: "e.g. the Podcast, Literature, or Video")
-                    let second = Mindtrix.SerialGenus(tier: 2, number: self.secondSerial, name: "nftEnum", description: "e.g. the Audio, Image, or Quest in a Podcast Show")
-                    let third = Mindtrix.SerialGenus(tier: 3, number: self.thirdSerial, name: "nftFirstSet", description: "e.g. the 2nd podcast show of a creator")
-                    let fourth = Mindtrix.SerialGenus(tier: 4, number: self.fourthSerial, name: "nftSecondSet", description: "e.g. the 18th episode of a podcast show")
-                    let fifth = Mindtrix.SerialGenus(tier: 5, number: self.fifthSerial, name: "nftThirdSet", description: "e.g. the 10th essence of an episode")
-                    let sixth = Mindtrix.SerialGenus(tier: 6, number: self.editionNumber, name: "nftEdtionNumber", description: "e.g. the 100th edition of a essence")
-                    let genusList: [Mindtrix.SerialGenus] = [first, second, third, fourth, fifth, sixth]
-                    return genusList
-                case Type<Mindtrix.AudioEssence>():
-                    let audioEssenceStartTime = self.metadata["audioEssenceStartTime"] as? UInt16 ?? 0
-                    let audioEssenceEndTime = self.metadata["audioEssenceEndTime"] as? UInt16 ?? 0
-                    let originalDuration = self.metadata["originalDuration"] as? UInt16 ?? 0
-                    return Mindtrix.AudioEssence(startTime: audioEssenceStartTime, endTime: audioEssenceEndTime, originalDuration: originalDuration)
+                case Type<MindtrixViews.Serials>():
+                    return MindtrixViews.Serials(self.getSerialDic())
+                case Type<MindtrixViews.AudioEssence>():
+                    return self.data.getAudioEssence()
                 case Type<MetadataViews.Royalties>():
-                    return MetadataViews.Royalties(
-                        self.royalties
-                    )
+                    return MetadataViews.Royalties(self.data.getRoyalties())
                 case Type<MetadataViews.IPFSFile>():
                     return MetadataViews.IPFSFile(
-                        cid: self.ipfsCid,
-                        path: self.ipfsDirectory
+                        cid: self.data.metadata["nftFileIPFSCid"] ?? "",
+                        path: self.data.metadata["nftFileIPFSDirectory"] ?? ""
                     )
                 case Type<MetadataViews.License>():
-                    return MetadataViews.License(self.licenseIdentifier)
+                    return MetadataViews.License(self.data.metadata["licenseIdentifier"] ?? "CC-BY-NC-4.0")
                 case Type<MetadataViews.NFTCollectionData>():
                     return MetadataViews.NFTCollectionData(
                         storagePath: Mindtrix.MindtrixCollectionStoragePath,
@@ -309,64 +291,110 @@ pub contract Mindtrix: NonFungibleToken {
                         publicCollection: Type<&Mindtrix.Collection{Mindtrix.MindtrixCollectionPublic}>(),
                         publicLinkedType: Type<&Mindtrix.Collection{Mindtrix.MindtrixCollectionPublic,NonFungibleToken.CollectionPublic,NonFungibleToken.Receiver,MetadataViews.ResolverCollection}>(),
                         providerLinkedType: Type<&Mindtrix.Collection{Mindtrix.MindtrixCollectionPublic,NonFungibleToken.CollectionPublic,NonFungibleToken.Provider,MetadataViews.ResolverCollection}>(),
-                        createEmptyCollectionFunction: (fun (): @NonFungibleToken.Collection {
-                            return <-Mindtrix.createEmptyCollection()
-                        })
+                        createEmptyCollectionFunction: (fun (): @NonFungibleToken.Collection {return <-Mindtrix.createEmptyCollection()})
                     )
                 case Type<MetadataViews.NFTCollectionDisplay>():
-                    let media = MetadataViews.Media(
-                        file: MetadataViews.HTTPFile(url: self.collectionSquareImageUrl),
-                        mediaType: self.collectionSquareImageType
+                    let squareImage = MetadataViews.Media(
+                        file: MetadataViews.HTTPFile(url: self.data.metadata["collectionSquareImageUrl"] ?? ""),
+                        mediaType: self.data.metadata["collectionSquareImageType"] ?? ""
                     )
-                    var socials = {} as {String: MetadataViews.ExternalURL }
-                    for key in self.collectionSocials.keys {
-                        let socialUrl = self.collectionSocials[key]!
-                        socials.insert(key: key, MetadataViews.ExternalURL(socialUrl))
-                    }
+                    let bannerImage = MetadataViews.Media(
+                        file: MetadataViews.HTTPFile(url: "https://firebasestorage.googleapis.com/v0/b/mindtrix-pro.appspot.com/o/public%2Fmindtrix%2Fmindtrix_banner.svg?alt=media&token=34a09a8e-50ad-415c-8d65-a57e6ed9aef6"),
+                        mediaType: self.data.metadata["collectionBannerImageType"] ?? ""
+                    )
+                    var socials = {
+                            "discord": MetadataViews.ExternalURL("https://discord.com/invite/bNCwSUUmDG"),
+                            "instagram": MetadataViews.ExternalURL("https://www.instagram.com/mindtrix_dao"),
+                            "facebook": MetadataViews.ExternalURL("https://www.facebook.com/mindtrix.dao"),
+                            "twitter": MetadataViews.ExternalURL("https://twitter.com/mindtrix_dao")
+                        } as {String: MetadataViews.ExternalURL }
+
                     return MetadataViews.NFTCollectionDisplay(
-                        name: self.collectionName,
-                        description: self.collectionDescription,
-                        externalURL: MetadataViews.ExternalURL(self.collectionExternalURL),
-                        squareImage: media,
-                        bannerImage: media,
-                        socials: socials
+                        name: self.data.metadata["collectionName"] ?? "",
+                        description: self.data.metadata["collectionDescription"] ?? "",
+                        externalURL: MetadataViews.ExternalURL(self.data.metadata["collectionExternalURL"] ?? ""),
+                        squareImage: squareImage,
+                        bannerImage: bannerImage,
+                        socials: socials,
                     )
                 case Type<MetadataViews.Traits>():
-                    var excludedTraits = ["mintedTime", "mintedBlock", "minter", "audioEssenceStartTime", "audioEssenceEndTime", "originalDuration"]
-                    let audioEssenceEnumValue = (UInt16(VoiceSerial.audio.rawValue) + 2 ) as UInt16
-                    if(self.secondSerial == audioEssenceEnumValue) {
-                        excludedTraits = ["packLocation"]
+                    let traitsView = MetadataViews.Traits([])
+
+                   let imageEssenceSerial = "2"
+                   let serial = self.getSerialDic()["essenceTypeSerial"]
+                   if(serial == imageEssenceSerial) {
+                      let packLocation = self.data.metadata["packLocation"] ?? ""
+                      let packLocationTrait = MetadataViews.Trait(name: "packLocation", value: packLocation, displayType: "String", rarity: nil)
+                      traitsView.addTrait(packLocationTrait)
+                   } else {
+                      let audioEssence = self.data.getAudioEssence()
+                      let mintedTimeTrait = MetadataViews.Trait(name: "mintedTime", value: self.data.createdTime, displayType: "Date", rarity: nil)
+                      let audioEssenceStartTimeTrait = MetadataViews.Trait(name: "audioEssenceStartTime", value: audioEssence.startTime, displayType: "Time", rarity: nil)
+                      let audioEssenceEndTimeTrait = MetadataViews.Trait(name: "audioEssenceEndTime", value: audioEssence.endTime, displayType: "Time", rarity: nil)
+                      let fullEpisodeDurationTrait = MetadataViews.Trait(name: "fullEpisodeDuration", value: audioEssence.fullEpisodeDuration, displayType: "Time", rarity: nil)
+                      traitsView.addTrait(mintedTimeTrait)
+                      traitsView.addTrait(audioEssenceStartTimeTrait)
+                      traitsView.addTrait(audioEssenceEndTimeTrait)
+                      traitsView.addTrait(fullEpisodeDurationTrait)
                     }
 
-                    let traitsView = MetadataViews.dictToTraits(dict: self.metadata, excludedNames: excludedTraits)
-
-                    traitsView.addTrait(mintedTimeTrait)
-
                     return traitsView
+                case Type<MindtrixViews.EssenceIdentifier>():
+                    return MindtrixViews.EssenceIdentifier(
+                        uuid: self.data.essenceId,
+                        serials: MindtrixViews.Serials(self.getSerialDic()).arr,
+                        holder: Mindtrix.account.address,
+                        showGuid: self.data.metadata["showGuid"] ?? "",
+                        episodeGuid: self.data.metadata["episodeGuid"] ?? "",
+                        createdTime: self.data.createdTime
+                    )
             }
             return nil
         }
+
+         destroy() {
+            // The total supply records how many times an NFT is minted, so it doesn't need to be decreased by one
+            // The accurate quantity of existing NFTs can be found in individual Mindtrix Essence.
+            // pub event NFTDestroyed(id: UInt64, essenceId: String, showGuid: String, episodeGuid: String, name: String, serial: String)
+            emit NFTDestroyed(
+                id: self.id,
+                essenceId: self.data.metadata["essenceId"] ?? "",
+                showGuid: self.data.metadata["showGuid"] ?? "",
+                episodeGuid: self.data.metadata["episodeGuid"] ?? "",
+                nftEdition: self.data.nftEdition ?? 0,
+                name: self.data.metadata["nftName"] ?? "",
+                serial: MindtrixViews.Serials(self.getSerialDic()).str
+            )
+        }
+
     }
 
     pub resource interface MindtrixCollectionPublic {
         pub fun deposit(token: @NonFungibleToken.NFT)
         pub fun getIDs(): [UInt64]
         pub fun borrowNFT(id: UInt64): &NonFungibleToken.NFT
-        pub fun borrowMindtrix(id: UInt64): &Mindtrix.NFT? {
+        pub fun borrowNFTStruct(id: UInt64): Mindtrix.NFTStruct
+        pub fun borrowMindtrix(id: UInt64): &Mindtrix.NFT {
             post {
-                (result == nil) || (result?.id == id):
+                (result == nil) || (result.id == id):
                     "Cannot borrow Mindtrix reference: the ID of the returned reference is incorrect"
             }
         }
     }
 
+    pub resource interface INFT {
+        pub fun getSerialDic(): {String: String}
+    }
+
+    // The Collection owns by each of user and stores all of their Mindtrix NFT
     pub resource Collection: MindtrixCollectionPublic, NonFungibleToken.Provider, NonFungibleToken.Receiver, NonFungibleToken.CollectionPublic, MetadataViews.ResolverCollection {
         // dictionary of NFT conforming tokens
-        // NFT is a resource type with an `UInt64` ID field
         pub var ownedNFTs: @{UInt64: NonFungibleToken.NFT}
+        access(account) let essenceToNFTId: EssenceToNFTId
 
         init () {
             self.ownedNFTs <- {}
+            self.essenceToNFTId = EssenceToNFTId()
         }
 
         // withdraw removes an NFT from the collection and moves it to the caller
@@ -382,16 +410,29 @@ pub contract Mindtrix: NonFungibleToken {
         // deposit takes a NFT and adds it to the collections dictionary
         // and adds the ID to the id array
         pub fun deposit(token: @NonFungibleToken.NFT) {
-            let token <- token as! @Mindtrix.NFT
+            let nft <- token as! @NFT
+            let id: UInt64 = nft.id
+            let templateId = nft.data.essenceId
 
-            let id: UInt64 = token.id
+            self.essenceToNFTId.addNFT(collectionId: templateId, nftId: id)
 
-            // add the new token to the dictionary which removes the old one
-            let oldToken <- self.ownedNFTs[id] <- token
-
+            let oldNFT <- self.ownedNFTs[id] <- nft
             emit Deposit(id: id, to: self.owner?.address)
 
-            destroy oldToken
+            destroy oldNFT
+        }
+
+        pub fun burn(id: UInt64) {
+            let token <- self.ownedNFTs.remove(key: id) ?? panic("Cannot find this NFT id:".concat(id.toString()))
+            let nft <- token as! @NFT
+            let templateId = nft.data.essenceId
+            let nftId = nft.id
+
+            if self.essenceToNFTId.dic.containsKey(templateId) {
+                self.essenceToNFTId.removeNFT(collectionId: templateId, nftId: nftId)
+            }
+
+            destroy nft
         }
 
         // getIDs returns an array of the IDs that are in the collection
@@ -405,7 +446,14 @@ pub contract Mindtrix: NonFungibleToken {
             return (&self.ownedNFTs[id] as &NonFungibleToken.NFT?)!
         }
 
-        pub fun borrowMindtrix(id: UInt64): &Mindtrix.NFT? {
+        pub fun borrowNFTStruct(id: UInt64): Mindtrix.NFTStruct {
+            let ref = (&self.ownedNFTs[id] as auth &NonFungibleToken.NFT?)!
+            let mindtrixNFT = ref as! &Mindtrix.NFT
+            return mindtrixNFT.data as Mindtrix.NFTStruct
+
+        }
+
+        pub fun borrowMindtrix(id: UInt64): &Mindtrix.NFT {
             let ref = (&self.ownedNFTs[id] as auth &NonFungibleToken.NFT?)!
             return ref as! &Mindtrix.NFT
         }
@@ -421,157 +469,27 @@ pub contract Mindtrix: NonFungibleToken {
         }
     }
 
-    // Resource that an admin or something similar would own to be
-    // able to mint new NFTs
-    //
-    pub resource NFTMinter {
-
-        // mintNFT mints a new NFT with a new ID
-        // and deposit it in the recipients collection using their collection reference
-        pub fun mintNFT(
-            recipient: &{NonFungibleToken.CollectionPublic},
-            name: String,
-            description: String,
-            thumbnail: String,
-            ipfsCid: String,
-            ipfsDirectory: String,
-            royalties: [MetadataViews.Royalty],
-            collectionName: String,
-            collectionDescription: String,
-            collectionExternalURL: String,
-            collectionSquareImageUrl: String,
-            collectionSquareImageType: String,
-            collectionSocials: {String: String},
-            licenseIdentifier: String,
-            firstSerial: UInt16,
-            secondSerial: UInt16,
-            thirdSerial: UInt16,
-            fourthSerial: UInt32,
-            fifthSerial: UInt16,
-            editionNumber: UInt64,
-            editionQuantity: UInt64,
-            extraMetadata: {String: AnyStruct}
-        ) {
-            log("id:")
-            log(Mindtrix.totalSupply)
-            log("audioEssenceStartTime:");
-            let audioEssenceStartTime = extraMetadata["audioEssenceStartTime"] as? UInt16
-            log(audioEssenceStartTime)
-
-            let audioEssenceEndTime = extraMetadata["audioEssenceEndTime"] as? UInt16
-            log(audioEssenceEndTime)
-
-            let audioEssenceFullEpisodeDuration = extraMetadata["audioEssenceFullEpisodeDuration"] as? UInt16
-            log(audioEssenceFullEpisodeDuration)
-
-            let metadata: {String: AnyStruct} = {}
-            let currentBlock = getCurrentBlock()
-            // general metadata that every NFTs would include
-            metadata["mintedBlock"] = currentBlock.height
-            metadata["mintedTime"] = currentBlock.timestamp
-            metadata["minter"] = recipient.owner!.address
-
-            let audioEssenceEnumValue = (UInt16(VoiceSerial.audio.rawValue) + 1 ) as UInt16
-            if(secondSerial == audioEssenceEnumValue) {
-                metadata["audioEssenceStartTime"] = audioEssenceStartTime
-                metadata["audioEssenceEndTime"] = audioEssenceEndTime
-                metadata["audioEssenceFullEpisodeDuration"] = audioEssenceFullEpisodeDuration
-            }
-
-            // create a new NFT
-            var newNFT <- create NFT(
-                id: Mindtrix.totalSupply,
-                name: name,
-                description: description,
-                thumbnail: thumbnail,
-                ipfsCid: ipfsCid,
-                ipfsDirectory: ipfsDirectory,
-                royalties: royalties,
-                collectionName: collectionName,
-                collectionDescription: collectionDescription,
-                collectionExternalURL: collectionExternalURL,
-                collectionSquareImageUrl: collectionSquareImageUrl,
-                collectionSquareImageType: collectionSquareImageType,
-                collectionSocials: collectionSocials,
-                licenseIdentifier: licenseIdentifier,
-                firstSerial: firstSerial,
-                secondSerial: secondSerial,
-                thirdSerial: thirdSerial,
-                fourthSerial: fourthSerial,
-                fifthSerial: fifthSerial,
-                editionNumber: editionNumber,
-                editionQuantity: editionQuantity,
-                metadata: metadata
-            )
-
-            // deposit it in the recipient's account using their reference
-            recipient.deposit(token: <-newNFT)
-
-            Mindtrix.totalSupply = Mindtrix.totalSupply + UInt64(1)
-        }
-
-        pub fun batchMintNFT(
-            recipient: &{NonFungibleToken.CollectionPublic},
-            name: String,
-            description: String,
-            thumbnail: String,
-            ipfsCid: String,
-            ipfsDirectory: String,
-            royalties: [MetadataViews.Royalty],
-            collectionName: String,
-            collectionDescription: String,
-            collectionExternalURL: String,
-            collectionSquareImageUrl: String,
-            collectionSquareImageType: String,
-            collectionSocials: {String: String},
-            licenseIdentifier: String,
-            firstSerial: UInt16,
-            secondSerial: UInt16,
-            thirdSerial: UInt16,
-            fourthSerial: UInt32,
-            fifthSerial: UInt16,
-            editionQuantity: UInt64,
-            extraMetadata: {String: AnyStruct}
-            ) {
-
-            var i: UInt64 = 0
-            while i < editionQuantity {
-                self.mintNFT(
-                    recipient: recipient,
-                    name: name,
-                    description: description,
-                    thumbnail: thumbnail,
-                    ipfsCid: ipfsCid,
-                    ipfsDirectory: ipfsDirectory,
-                    royalties: royalties,
-                    collectionName: collectionName,
-                    collectionDescription: collectionDescription,
-                    collectionExternalURL: collectionExternalURL,
-                    collectionSquareImageUrl: collectionSquareImageUrl,
-                    collectionSquareImageType: collectionSquareImageType,
-                    collectionSocials: collectionSocials,
-                    licenseIdentifier: licenseIdentifier,
-                    firstSerial: firstSerial,
-                    secondSerial: secondSerial,
-                    thirdSerial: thirdSerial,
-                    fourthSerial: fourthSerial,
-                    fifthSerial: fifthSerial,
-                    editionNumber: UInt64(i),
-                    editionQuantity: editionQuantity,
-                    extraMetadata: extraMetadata
-                )
-                i = i + UInt64(1)
-            }
-        }
-    }
 
  // ========================================================
  //                         FUNCTION
  // ========================================================
 
-    // public function that anyone can call to create a new empty collection
-    pub fun createEmptyCollection(): @NonFungibleToken.Collection {
+    pub fun createEmptyCollection(): @Collection {
         return <- create Collection()
+    }
+
+    access(account) fun mintNFT(data: NFTStruct): @NFT {
+        return <- create NFT(data: data)
+    }
+
+    access(account) fun batchMintNFT(recipient: &Mindtrix.Collection{Mindtrix.MindtrixCollectionPublic}, data: NFTStruct, maxEdition: UInt64): @[NFT]  {
+        var i: UInt64 = 0
+        var nfts: @[NFT] <- []
+        while i < maxEdition {
+            nfts.append(<- self.mintNFT(data: data))
+            i = i + 1
+        }
+        return <- nfts
     }
 
  // ========================================================
@@ -580,19 +498,17 @@ pub contract Mindtrix: NonFungibleToken {
 
     init() {
         self.totalSupply = 0
-        self.AdminAddress = self.account.address
+        let royaltyReceiverPublicPath: PublicPath = /public/flowTokenReceiver
         self.RoyaltyReceiverPublicPath = /public/flowTokenReceiver
-        self.CollectionStoragePath = /storage/MindtrixCollection
-        self.CollectionPublicPath = /public/MindtrixCollection
-        self.MinterStoragePath = /storage/MindtrixMinter
+        self.MindtrixCollectionStoragePath = /storage/MindtrixNFTCollection
+        self.MindtrixCollectionPublicPath = /public/MindtrixNFTCollection
 
-        self.account.save(<-create Collection(), to: self.CollectionStoragePath)
+        self.account.save(<-Mindtrix.createEmptyCollection(), to: self.MindtrixCollectionStoragePath)
+
         self.account.link<&Mindtrix.Collection{NonFungibleToken.CollectionPublic, Mindtrix.MindtrixCollectionPublic, MetadataViews.ResolverCollection}>(
-            self.CollectionPublicPath,
-            target: self.CollectionStoragePath
+            self.MindtrixCollectionPublicPath,
+            target: self.MindtrixCollectionStoragePath
         )
-
-        self.account.save(<- create NFTMinter(), to: self.MinterStoragePath)
 
         emit ContractInitialized()
     }

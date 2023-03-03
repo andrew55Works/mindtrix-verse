@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import ViennaWoodsScene from '../../three-js/vienna-woods-scene';
+import ViennaWoodsScene from '../../three-js/scene/vienna-woods-scene';
 import { usePrevious } from '../utils/previous.hooks';
 import { ViennaWorldFiles } from '../../types/vienna-world.types';
 

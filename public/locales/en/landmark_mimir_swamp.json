@@ -1,4 +1,5 @@
 {
+  "card_landmark_utility": "Acquire special upgrade items\nFor example: By obtaining upgrade items, you can upgrade the accessories of Otter NFT, which will make your NFT more scarce. ",
   "card_pack_inventory": "<0>{{pack_remain}}</0> /<1>{{pack_all}}</1>",
   "card_pack_name": "Smelter Pack",
   "card_title_landmark": "Mimir Swamp",

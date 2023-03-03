@@ -30,6 +30,8 @@ export const getViennaWoodsLandmarkCommonI18n = (t: TFunction) => {
       'card_tab_pack_information',
     ),
     card_tab_utility: i18n.landmark_common('card_tab_utility'),
+    modal_tab_pack: i18n.landmark_common('modal_tab_pack'),
+    modal_tab_story: i18n.landmark_common('modal_tab_story'),
   };
 };
 

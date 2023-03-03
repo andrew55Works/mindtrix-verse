@@ -91,6 +91,7 @@ const CoverImage: FC<Props> = React.memo(
           onLoad={onLoad}
           onLoadingComplete={onLoadComplete}
           onError={onError}
+          draggable={false}
         />
       </S.Container>
     );

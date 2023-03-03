@@ -1,6 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
 import rootReducer from './root.reducer';
-import { panGuApi } from '../api/restful/pangu.query';
 import {
   FLUSH,
   PAUSE,
@@ -35,7 +34,7 @@ if (isServer) {
         serializableCheck: {
           ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
         },
-      }).concat(...loggerMiddle, panGuApi.middleware, coinGeckoApi.middleware),
+      }).concat(...loggerMiddle, coinGeckoApi.middleware),
   });
 } else {
   const stateSyncMiddleware = createStateSyncMiddleware({
@@ -53,7 +52,6 @@ if (isServer) {
         },
       }).concat(
         ...loggerMiddle,
-        panGuApi.middleware,
         coinGeckoApi.middleware,
         stateSyncMiddleware,
       ),
